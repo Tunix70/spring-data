@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class PersonSerice {
+public class PersonService {
     private PersonRepository personRepository;
 
-    public PersonSerice(PersonRepository personRepository) {
+    public PersonService(PersonRepository personRepository) {
         this.personRepository = personRepository;
     }
 
@@ -30,4 +30,14 @@ public class PersonSerice {
     public void deleteById(Long id) {
         personRepository.deleteById(id);
     }
+
+    public List<Person> saveList(List<Person> personList){
+        return personRepository.saveAll(personList);
+    }
+
+    public void deleteList (List<Person> personList){
+        personRepository.deleteAll(personList);
+    }
+
+
 }

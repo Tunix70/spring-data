@@ -30,4 +30,8 @@ public class DepartmentService {
     public void deleteById(Long id) {
         departmentRepository.deleteById(id);
     }
+
+    public Department FindByName(String name) {
+        return departmentRepository.findFirstByNameContains(name).orElse(null);
+    }
 }

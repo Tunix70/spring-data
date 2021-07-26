@@ -16,7 +16,7 @@ public class Person {
     private String second_name;
     @Column(name = "birthday", nullable = false)
     private Date birthday;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
