@@ -18,8 +18,8 @@ public class DocumentService {
         return documentRepository.findAll();
     }
 
-    public Document getDocumentById(Long id) {
-        return documentRepository.findById(id).orElse(null);
+    public Document getDocumentById(String number) {
+        return documentRepository.getByNumber(number);
 
     }
 
@@ -27,7 +27,7 @@ public class DocumentService {
         return documentRepository.save(document);
     }
 
-    public void deleteById(Long id) {
-        documentRepository.deleteById(id);
+    public void deleteById(String number) {
+        documentRepository.deleteByNumber(number);
     }
 }

@@ -28,19 +28,22 @@ public class RuleAllService {
         this.languageService = languageService;
     }
 
-    @Transactional
+//    @Transactional
     public void run() {
 //        departmentService.save(new Department(null, "Main Department"));
-//        Department department = departmentService.getDepartmentById(2L);
+//        Department department = departmentService.getDepartmentById(1L);
 //        Person person = new Person(null, "Ivan", "Ivanov", date, department);
 //        personService.save(person);
-//        Person person1 = new Person(null, "Ivan", "Ivanov", date, department1);
+        Person person = personService.getPersonById(1L);
+        Document document = documentService.save(new Document("five", date));
+        person.setDocument(document);
+        personService.save(person);
 //        personService.save(person1);
 //        departmentService.deleteById(18L);
 //        personService.deleteById(25L);
 //        personService.deleteById(1L);
 //        Department department = departmentService.FindByName("CRUD");
-        documentService.save(new Document(null, "1fd9-paos-9999", date));
+//        documentService.save(new Document(null, "1fd9-paos-9999", date));
 //        Person person = personService.getPersonById(1L);
 //        List<Language> list = person.getLanguageList();
 //        System.out.println(list);

@@ -25,8 +25,8 @@ public class Person {
             joinColumns = @JoinColumn (name = "person_id"),
             inverseJoinColumns = @JoinColumn(name = "language_id"))
     private List<Language> languageList;
-    @OneToOne(optional = false, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "document_id", referencedColumnName = "id")
     private Document document;
 
     public Person() {
