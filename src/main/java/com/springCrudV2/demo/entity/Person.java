@@ -3,6 +3,7 @@ package com.springCrudV2.demo.entity;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "person")
@@ -19,6 +20,14 @@ public class Person {
     @ManyToOne
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
+    @ManyToMany
+    @JoinTable(name = "person_language",
+            joinColumns = @JoinColumn (name = "person_id"),
+            inverseJoinColumns = @JoinColumn(name = "language_id"))
+    private List<Language> languageList;
+    @OneToOne(optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id")
+    private Document document;
 
     public Person() {
     }
@@ -29,6 +38,16 @@ public class Person {
         this.second_name = second_name;
         this.birthday = birthday;
         this.department = department;
+    }
+
+    public Person(Long id, String first_name, String second_name, Date birthday, Department department, List<Language> languageList, Document document) {
+        this.id = id;
+        this.first_name = first_name;
+        this.second_name = second_name;
+        this.birthday = birthday;
+        this.department = department;
+        this.languageList = languageList;
+        this.document = document;
     }
 
     public Long getId() {
@@ -71,6 +90,22 @@ public class Person {
         this.department = department;
     }
 
+    public List<Language> getLanguageList() {
+        return languageList;
+    }
+
+    public void setLanguageList(List<Language> languageList) {
+        this.languageList = languageList;
+    }
+
+    public Document getDocument() {
+        return document;
+    }
+
+    public void setDocument(Document document) {
+        this.document = document;
+    }
+
     @Override
     public String toString() {
         return "Person{" +
@@ -78,6 +113,9 @@ public class Person {
                 ", first_name='" + first_name + '\'' +
                 ", second_name='" + second_name + '\'' +
                 ", birthday=" + birthday +
+                ", department=" + department +
+                ", languageList=" + languageList +
+                ", document=" + document +
                 '}';
     }
 }

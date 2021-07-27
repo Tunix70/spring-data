@@ -18,7 +18,7 @@ public class PersonService {
         return personRepository.findAll();
     }
 
-    public Person getDepartmentById(Long id) {
+    public Person getPersonById(Long id) {
         return personRepository.findById(id).orElse(null);
 
     }
