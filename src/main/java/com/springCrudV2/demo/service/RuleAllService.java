@@ -28,34 +28,24 @@ public class RuleAllService {
         this.languageService = languageService;
     }
 
-//    @Transactional
+    @Transactional
     public void run() {
 //        departmentService.save(new Department(null, "Main Department"));
 //        Department department = departmentService.getDepartmentById(1L);
-//        Person person = new Person(null, "Ivan", "Ivanov", date, department);
+//        Document document = documentService.save(new Document("eleven", date));
+//        documentService.save(document);
+//        Person person = new Person(null, "Kolya", "Petrov", date, department);
 //        personService.save(person);
-        Person person = personService.getPersonById(1L);
-        Document document = documentService.save(new Document("five", date));
-        person.setDocument(document);
-        personService.save(person);
-//        personService.save(person1);
+
+//        Person person = personService.getPersonById(2L);
+//        Document document = documentService.getDocumentById("eleven");
+//        person.setDocument(document);
+//        personService.save(person);
 //        departmentService.deleteById(18L);
-//        personService.deleteById(25L);
-//        personService.deleteById(1L);
+        personService.deleteById(2L);
+//        departmentService.deleteById(1L);
 //        Department department = departmentService.FindByName("CRUD");
-//        documentService.save(new Document(null, "1fd9-paos-9999", date));
-//        Person person = personService.getPersonById(1L);
-//        List<Language> list = person.getLanguageList();
-//        System.out.println(list);
-//        languageService.save(new Language(null, "EU"));
-//        Person person = personService.getPersonById(1L);
-//        Language language = languageService.getLanguageById(1L);
-//        Language language2 = languageService.getLanguageById(2L);
-//        List<Language> languageList = new ArrayList<>();
-//        languageList.add(language);
-//        languageList.add(language2);
-//        person.setLanguageList(languageList);
-//        languageService.deleteById(1L);
+//        documentService.deleteByNumber("seven");
 
     }
 }

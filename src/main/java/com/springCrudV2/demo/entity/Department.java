@@ -11,7 +11,7 @@ public class Department {
     private Long id;
     @Column(name = "name", nullable = false, unique = true)
     private String name;
-    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Person> personList;
 
     public Department() {
@@ -51,7 +51,6 @@ public class Department {
         return "Department{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", personList=" + personList +
                 '}';
     }
 }

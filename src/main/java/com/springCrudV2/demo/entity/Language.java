@@ -2,12 +2,15 @@ package com.springCrudV2.demo.entity;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(name = "language")
+@Table(name = "language",
+uniqueConstraints = @UniqueConstraint(columnNames = "name"))
+
 public class Language {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "name", nullable = false)
     private String name;
@@ -15,7 +18,7 @@ public class Language {
     @JoinTable(name = "person_language",
                 joinColumns = @JoinColumn (name = "language_id"),
                 inverseJoinColumns = @JoinColumn(name = "person_id"))
-    private List<Person> personList;
+    private Set<Person> personList;
 
     public Language() {
     }
@@ -25,7 +28,7 @@ public class Language {
         this.name = name;
     }
 
-    public Language(Long id, String name, List<Person> personList) {
+    public Language(Long id, String name, Set<Person> personList) {
         this.id = id;
         this.name = name;
         this.personList = personList;
@@ -47,11 +50,11 @@ public class Language {
         this.name = name;
     }
 
-    public List<Person> getPersonList() {
+    public Set<Person> getPersonList() {
         return personList;
     }
 
-    public void setPersonList(List<Person> personList) {
+    public void setPersonList(Set<Person> personList) {
         this.personList = personList;
     }
 

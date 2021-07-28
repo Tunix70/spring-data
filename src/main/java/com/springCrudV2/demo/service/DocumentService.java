@@ -27,7 +27,7 @@ public class DocumentService {
         return documentRepository.save(document);
     }
 
-    public void deleteById(String number) {
+    public void deleteByNumber(String number) {
         documentRepository.deleteByNumber(number);
     }
 }

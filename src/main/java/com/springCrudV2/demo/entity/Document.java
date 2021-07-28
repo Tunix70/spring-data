@@ -12,7 +12,7 @@ public class Document {
     private String number;
     @Column(name = "expiry_date")
     private Date expiry_date;
-    @OneToOne(mappedBy = "document")
+    @OneToOne(mappedBy = "document" )
     private Person person;
 
     public Document() {

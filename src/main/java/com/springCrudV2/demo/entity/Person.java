@@ -1,9 +1,12 @@
 package com.springCrudV2.demo.entity;
 
 
+import com.sun.istack.NotNull;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "person")
@@ -19,13 +22,14 @@ public class Person {
     private Date birthday;
     @ManyToOne
     @JoinColumn(name = "department_id", nullable = false)
+    @NotNull
     private Department department;
     @ManyToMany
     @JoinTable(name = "person_language",
             joinColumns = @JoinColumn (name = "person_id"),
             inverseJoinColumns = @JoinColumn(name = "language_id"))
-    private List<Language> languageList;
-    @OneToOne(cascade = CascadeType.ALL)
+    private Set<Language> languageList;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "document_id", referencedColumnName = "id")
     private Document document;
 
@@ -40,13 +44,22 @@ public class Person {
         this.department = department;
     }
 
-    public Person(Long id, String first_name, String second_name, Date birthday, Department department, List<Language> languageList, Document document) {
+    public Person(Long id, String first_name, String second_name, Date birthday, Department department, Set<Language> languageList, Document document) {
         this.id = id;
         this.first_name = first_name;
         this.second_name = second_name;
         this.birthday = birthday;
         this.department = department;
         this.languageList = languageList;
+        this.document = document;
+    }
+
+    public Person(Long id, String first_name, String second_name, Date birthday, Department department, Document document) {
+        this.id = id;
+        this.first_name = first_name;
+        this.second_name = second_name;
+        this.birthday = birthday;
+        this.department = department;
         this.document = document;
     }
 
@@ -90,11 +103,11 @@ public class Person {
         this.department = department;
     }
 
-    public List<Language> getLanguageList() {
+    public Set<Language> getLanguageList() {
         return languageList;
     }
 
-    public void setLanguageList(List<Language> languageList) {
+    public void setLanguageList(Set<Language> languageList) {
         this.languageList = languageList;
     }
 
@@ -113,9 +126,6 @@ public class Person {
                 ", first_name='" + first_name + '\'' +
                 ", second_name='" + second_name + '\'' +
                 ", birthday=" + birthday +
-                ", department=" + department +
-                ", languageList=" + languageList +
-                ", document=" + document +
                 '}';
     }
 }
