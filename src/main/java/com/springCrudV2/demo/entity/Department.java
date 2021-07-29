@@ -1,6 +1,7 @@
 package com.springCrudV2.demo.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -9,7 +10,8 @@ public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "name", nullable = false, unique = true)
+    @NotNull
+    @Column(name = "name", unique = true, nullable = false)
     private String name;
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Person> personList;
@@ -19,6 +21,10 @@ public class Department {
 
     public Department(Long id, String name) {
         this.id = id;
+        this.name = name;
+    }
+
+    public Department(String name) {
         this.name = name;
     }
 

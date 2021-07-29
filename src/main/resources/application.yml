@@ -5,7 +5,7 @@ spring:
     username: postgres
     password: root
   jpa:
-    hibernate.ddl-auto: update
+    hibernate.ddl-auto: create
     generate-ddl: true
     show-sql: true
     properties:

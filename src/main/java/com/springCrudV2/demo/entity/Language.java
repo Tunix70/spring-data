@@ -4,9 +4,10 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
 
+
 @Entity
 @Table(name = "language",
-uniqueConstraints = @UniqueConstraint(columnNames = "name"))
+        uniqueConstraints = @UniqueConstraint(columnNames = "name"))
 
 public class Language {
     @Id
@@ -16,8 +17,8 @@ public class Language {
     private String name;
     @ManyToMany
     @JoinTable(name = "person_language",
-                joinColumns = @JoinColumn (name = "language_id"),
-                inverseJoinColumns = @JoinColumn(name = "person_id"))
+            joinColumns = @JoinColumn(name = "language_id"),
+            inverseJoinColumns = @JoinColumn(name = "person_id"))
     private Set<Person> personList;
 
     public Language() {

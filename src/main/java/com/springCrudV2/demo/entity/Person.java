@@ -1,11 +1,8 @@
 package com.springCrudV2.demo.entity;
 
 
-import com.sun.istack.NotNull;
-
 import javax.persistence.*;
 import java.sql.Date;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -22,11 +19,10 @@ public class Person {
     private Date birthday;
     @ManyToOne
     @JoinColumn(name = "department_id", nullable = false)
-    @NotNull
     private Department department;
     @ManyToMany
     @JoinTable(name = "person_language",
-            joinColumns = @JoinColumn (name = "person_id"),
+            joinColumns = @JoinColumn(name = "person_id"),
             inverseJoinColumns = @JoinColumn(name = "language_id"))
     private Set<Language> languageList;
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)

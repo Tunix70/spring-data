@@ -12,7 +12,6 @@ public class DemoApplication {
 		ConfigurableApplicationContext run = SpringApplication.run(DemoApplication.class, args);
 		RuleAllService ruleAllService = run.getBean("ruleAllService", RuleAllService.class);
 		ruleAllService.run();
-
 	}
 
 }

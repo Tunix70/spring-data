@@ -22,7 +22,6 @@ public class LanguageService {
 
     public Language getLanguageById(Long id) {
         return languageRepository.findById(id).orElse(null);
-
     }
 
     public Language save(Language language) {
@@ -32,4 +31,5 @@ public class LanguageService {
     public void deleteById(Long id) {
         languageRepository.deleteById(id);
     }
+
 }
