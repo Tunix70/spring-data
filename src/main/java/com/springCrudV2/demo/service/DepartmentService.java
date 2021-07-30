@@ -3,6 +3,7 @@ package com.springCrudV2.demo.service;
 import com.springCrudV2.demo.dao.DepartmentRepository;
 import com.springCrudV2.demo.entity.Department;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

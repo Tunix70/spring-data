@@ -19,11 +19,6 @@ public class Department {
     public Department() {
     }
 
-    public Department(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
     public Department(String name) {
         this.name = name;
     }
@@ -44,13 +39,13 @@ public class Department {
         this.name = name;
     }
 
-    public List<Person> getPersonList() {
-        return personList;
-    }
-
-    public void setPersonList(List<Person> personList) {
-        this.personList = personList;
-    }
+//    public List<Person> getPersonList() {
+//        return personList;
+//    }
+//
+//    public void setPersonList(List<Person> personList) {
+//        this.personList = personList;
+//    }
 
     @Override
     public String toString() {

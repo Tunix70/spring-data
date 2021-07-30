@@ -32,33 +32,6 @@ public class Person {
     public Person() {
     }
 
-    public Person(Long id, String first_name, String second_name, Date birthday, Department department) {
-        this.id = id;
-        this.first_name = first_name;
-        this.second_name = second_name;
-        this.birthday = birthday;
-        this.department = department;
-    }
-
-    public Person(Long id, String first_name, String second_name, Date birthday, Department department, Set<Language> languageList, Document document) {
-        this.id = id;
-        this.first_name = first_name;
-        this.second_name = second_name;
-        this.birthday = birthday;
-        this.department = department;
-        this.languageList = languageList;
-        this.document = document;
-    }
-
-    public Person(Long id, String first_name, String second_name, Date birthday, Department department, Document document) {
-        this.id = id;
-        this.first_name = first_name;
-        this.second_name = second_name;
-        this.birthday = birthday;
-        this.department = department;
-        this.document = document;
-    }
-
     public Long getId() {
         return id;
     }
@@ -98,14 +71,14 @@ public class Person {
     public void setDepartment(Department department) {
         this.department = department;
     }
-
-    public Set<Language> getLanguageList() {
-        return languageList;
-    }
-
-    public void setLanguageList(Set<Language> languageList) {
-        this.languageList = languageList;
-    }
+//
+//    public Set<Language> getLanguageList() {
+//        return languageList;
+//    }
+//
+//    public void setLanguageList(Set<Language> languageList) {
+//        this.languageList = languageList;
+//    }
 
     public Document getDocument() {
         return document;

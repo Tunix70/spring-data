@@ -18,10 +18,6 @@ public class Document {
     public Document() {
     }
 
-    public Document(String number, Date expiry_date) {
-        this.number = number;
-        this.expiry_date = expiry_date;
-    }
 
     public String getNumber() {
         return number;
@@ -39,13 +35,13 @@ public class Document {
         this.expiry_date = expiry_date;
     }
 
-    public Person getPerson() {
-        return person;
-    }
-
-    public void setPerson(Person person) {
-        this.person = person;
-    }
+//    public Person getPerson() {
+//        return person;
+//    }
+//
+//    public void setPerson(Person person) {
+//        this.person = person;
+//    }
 
 
     @Override

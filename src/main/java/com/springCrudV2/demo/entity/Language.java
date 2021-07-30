@@ -24,16 +24,6 @@ public class Language {
     public Language() {
     }
 
-    public Language(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public Language(Long id, String name, Set<Person> personList) {
-        this.id = id;
-        this.name = name;
-        this.personList = personList;
-    }
 
     public Long getId() {
         return id;
@@ -51,13 +41,13 @@ public class Language {
         this.name = name;
     }
 
-    public Set<Person> getPersonList() {
-        return personList;
-    }
-
-    public void setPersonList(Set<Person> personList) {
-        this.personList = personList;
-    }
+//    public Set<Person> getPersonList() {
+//        return personList;
+//    }
+//
+//    public void setPersonList(Set<Person> personList) {
+//        this.personList = personList;
+//    }
 
     @Override
     public String toString() {
