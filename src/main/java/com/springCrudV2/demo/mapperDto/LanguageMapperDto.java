@@ -11,7 +11,6 @@ public class LanguageMapperDto {
         if (language != null) {
             dto.setId(language.getId());
             dto.setName(language.getName());
-//            dto.setPersonList(language.getPersonList());
             return dto;
         } else
             return null;
@@ -23,7 +22,6 @@ public class LanguageMapperDto {
         if (dto != null) {
             language.setId(dto.getId());
             language.setName(dto.getName());
-            language.setPersonList(dto.getPersonList());
             return language;
         } else
             return null;

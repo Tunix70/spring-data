@@ -3,7 +3,13 @@ package com.springCrudV2.demo.mapperDto;
 import com.springCrudV2.demo.dto.PersonDto;
 import com.springCrudV2.demo.entity.Person;
 
+import java.util.stream.Collectors;
+
 public class PersonMapperDto {
+    DepartmentMapperDto departmentMapperDto = new DepartmentMapperDto();
+    LanguageMapperDto languageMapperDto = new LanguageMapperDto();
+    DocumentMapperDto documentMapperDto = new DocumentMapperDto();
+
     public PersonDto mapToDepartmentDto(Person person) {
         PersonDto dto = new PersonDto();
 
@@ -12,9 +18,11 @@ public class PersonMapperDto {
             dto.setFirst_name(person.getFirst_name());
             dto.setSecond_name(person.getSecond_name());
             dto.setBirthday(person.getBirthday());
-//            dto.setDepartment(person.getDepartment());
-//            dto.setDocument(person.getDocument());
-//            dto.setLanguageList(person.getLanguageList());
+            dto.setDepartmentDto(departmentMapperDto.mapToDepartmentDto(person.getDepartment()));
+            dto.setDocumentDto(documentMapperDto.mapToDepartmentDto(person.getDocument()));
+            dto.setDtoSet(person.getLanguageList().stream()
+                                                .map(languageMapperDto ::mapToDepartmentDto)
+                                                .collect(Collectors.toSet()));
             return dto;
         } else
             return null;
@@ -28,9 +36,9 @@ public class PersonMapperDto {
             person.setFirst_name(dto.getFirst_name());
             person.setSecond_name(dto.getSecond_name());
             person.setBirthday(dto.getBirthday());
-            person.setDepartment(dto.getDepartment());
-            person.setDocument(dto.getDocument());
-            person.setLanguageList(dto.getLanguageList());
+//            person.setDepartment(dto.getDepartment());
+//            person.setDocument(dto.getDocument());
+//            person.setLanguageList(dto.getLanguageList());
             return person;
         } else
             return null;

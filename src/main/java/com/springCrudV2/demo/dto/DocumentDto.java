@@ -1,13 +1,11 @@
 package com.springCrudV2.demo.dto;
 
-import com.springCrudV2.demo.entity.Person;
-
 import java.sql.Date;
 
 public class DocumentDto {
     private String number;
     private Date expiry_date;
-    private Person person;
+
 
     public DocumentDto() {
     }
@@ -28,11 +26,4 @@ public class DocumentDto {
         this.expiry_date = expiry_date;
     }
 
-    public Person getPerson() {
-        return person;
-    }
-
-    public void setPerson(Person person) {
-        this.person = person;
-    }
 }
