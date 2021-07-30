@@ -1,24 +1,24 @@
-package com.springCrudV2.demo.service;
-
-import org.springframework.stereotype.Service;
-
-import java.sql.Date;
-
-@Service
-public class RuleAllService {
-    private DepartmentService departmentService;
-    private PersonService personService;
-    private DocumentService documentService;
-    private LanguageService languageService;
-
-    private Date date = new Date(2L);
-
-    public RuleAllService(DepartmentService departmentService, PersonService personService, DocumentService documentService, LanguageService languageService) {
-        this.departmentService = departmentService;
-        this.personService = personService;
-        this.documentService = documentService;
-        this.languageService = languageService;
-    }
+//package com.springCrudV2.demo.service;
+//
+//import org.springframework.stereotype.Service;
+//
+//import java.sql.Date;
+//
+//@Service
+//public class RuleAllService {
+//    private DepartmentService departmentService;
+//    private PersonService personService;
+//    private DocumentService documentService;
+//    private LanguageService languageService;
+//
+//    private Date date = new Date(2L);
+//
+//    public RuleAllService(DepartmentService departmentService, PersonService personService, DocumentService documentService, LanguageService languageService) {
+//        this.departmentService = departmentService;
+//        this.personService = personService;
+//        this.documentService = documentService;
+//        this.languageService = languageService;
+//    }
 //Initialization block
 //    public void run() {
 //        Document document1 = documentService.save(new Document("pass-012-213", date));
@@ -73,4 +73,4 @@ public class RuleAllService {
 //        person4.setDocument(document4);
 //        personService.save(person4);
 //    }
-}
+//}

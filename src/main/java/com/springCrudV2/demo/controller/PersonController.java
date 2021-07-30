@@ -1,10 +1,10 @@
 package com.springCrudV2.demo.controller;
 
 
+import com.springCrudV2.demo.dto.PersonDto;
 import com.springCrudV2.demo.entity.Person;
 import com.springCrudV2.demo.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +24,8 @@ public class PersonController {
     }
 
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Person>> getAll() {
-        List<Person> personList = personService.getAll();
+    public ResponseEntity<List<PersonDto>> getAll() {
+        List<PersonDto> personList = personService.getAll();
 
         return personList != null || !personList.isEmpty()
                 ? new ResponseEntity<>(personList, HttpStatus.OK)
@@ -33,30 +33,28 @@ public class PersonController {
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Person> getById(@PathVariable("id") Long id) {
-        Person person = personService.getPersonById(id);
+    public ResponseEntity<PersonDto> getById(@PathVariable("id") Long id) {
+        PersonDto person = personService.getPersonById(id);
         return person != null
                 ? new ResponseEntity<>(person, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Person> save(@RequestBody @Valid Person person) {
-        HttpHeaders headers = new HttpHeaders();
-        Person savePerson = personService.save(person);
+    public ResponseEntity<PersonDto> save(@RequestBody @Valid PersonDto personDto) {
+        PersonDto savePerson = personService.save(personDto);
 
-        return person != null
-                ? new ResponseEntity<>(savePerson, headers, HttpStatus.CREATED)
+        return personDto != null
+                ? new ResponseEntity<>(savePerson, HttpStatus.CREATED)
                 : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Person> update(@RequestBody @Valid Person person) {
-        HttpHeaders headers = new HttpHeaders();
-        personService.save(person);
-        return person.getId() != null
-                ? new ResponseEntity<>(HttpStatus.NOT_MODIFIED)
-                : new ResponseEntity<>(person, headers, HttpStatus.OK);
+    public ResponseEntity<PersonDto> update(@RequestBody @Valid PersonDto personDto) {
+        PersonDto updatePerson = personService.save(personDto);
+        return updatePerson != null
+                ? new ResponseEntity<>(updatePerson, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

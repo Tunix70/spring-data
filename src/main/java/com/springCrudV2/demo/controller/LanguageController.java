@@ -1,9 +1,9 @@
 package com.springCrudV2.demo.controller;
 
+import com.springCrudV2.demo.dto.LanguageDto;
 import com.springCrudV2.demo.entity.Language;
 import com.springCrudV2.demo.service.LanguageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +23,8 @@ public class LanguageController {
     }
 
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Language>> getAll() {
-        List<Language> languageList = languageService.getAll();
+    public ResponseEntity<List<LanguageDto>> getAll() {
+        List<LanguageDto> languageList = languageService.getAll();
 
         return languageList != null || !languageList.isEmpty()
                 ? new ResponseEntity<>(languageList, HttpStatus.OK)
@@ -32,30 +32,28 @@ public class LanguageController {
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Language> getById(@PathVariable("id") Long id) {
-        Language language = languageService.getLanguageById(id);
+    public ResponseEntity<LanguageDto> getById(@PathVariable("id") Long id) {
+        LanguageDto language = languageService.getLanguageById(id);
         return language != null
                 ? new ResponseEntity<>(language, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Language> save(@RequestBody @Valid Language language) {
-        HttpHeaders headers = new HttpHeaders();
-        Language saveLanguage = languageService.save(language);
+    public ResponseEntity<LanguageDto> save(@RequestBody @Valid LanguageDto dto) {
+        LanguageDto saveLanguage = languageService.save(dto);
 
-        return language != null
-                ? new ResponseEntity<>(saveLanguage, headers, HttpStatus.CREATED)
+        return dto != null
+                ? new ResponseEntity<>(saveLanguage, HttpStatus.CREATED)
                 : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Language> update(@RequestBody @Valid Language language) {
-        HttpHeaders headers = new HttpHeaders();
-        languageService.save(language);
-        return language.getId() != null
+    public ResponseEntity<LanguageDto> update(@RequestBody @Valid LanguageDto dto) {
+        languageService.save(dto);
+        return dto.getId() != null
                 ? new ResponseEntity<>(HttpStatus.NOT_MODIFIED)
-                : new ResponseEntity<>(language, headers, HttpStatus.OK);
+                : new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

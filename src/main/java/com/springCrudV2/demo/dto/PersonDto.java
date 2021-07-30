@@ -1,35 +1,32 @@
-package com.springCrudV2.demo.entity;
+package com.springCrudV2.demo.dto;
 
+import com.springCrudV2.demo.entity.Department;
+import com.springCrudV2.demo.entity.Document;
+import com.springCrudV2.demo.entity.Language;
 
-import javax.persistence.*;
 import java.sql.Date;
 import java.util.Set;
 
-@Entity
-@Table(name = "person")
-public class Person {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class PersonDto {
     private Long id;
-    @Column(name = "first_name", nullable = false)
     private String first_name;
-    @Column(name = "second_name", nullable = false)
     private String second_name;
-    @Column(name = "birthday", nullable = false)
     private Date birthday;
-    @ManyToOne
-    @JoinColumn(name = "department_id", nullable = false)
     private Department department;
-    @ManyToMany
-    @JoinTable(name = "person_language",
-            joinColumns = @JoinColumn(name = "person_id"),
-            inverseJoinColumns = @JoinColumn(name = "language_id"))
     private Set<Language> languageList;
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "document_id", referencedColumnName = "id")
     private Document document;
 
-    public Person() {
+    public PersonDto() {
+    }
+
+    public PersonDto(Long id, String first_name, String second_name, Date birthday, Department department, Set<Language> languageList, Document document) {
+        this.id = id;
+        this.first_name = first_name;
+        this.second_name = second_name;
+        this.birthday = birthday;
+        this.department = department;
+        this.languageList = languageList;
+        this.document = document;
     }
 
     public Long getId() {
@@ -86,15 +83,5 @@ public class Person {
 
     public void setDocument(Document document) {
         this.document = document;
-    }
-
-    @Override
-    public String toString() {
-        return "Person{" +
-                "id=" + id +
-                ", first_name='" + first_name + '\'' +
-                ", second_name='" + second_name + '\'' +
-                ", birthday=" + birthday +
-                '}';
     }
 }

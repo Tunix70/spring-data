@@ -24,7 +24,6 @@ public class Language {
     public Language() {
     }
 
-
     public Long getId() {
         return id;
     }
@@ -41,20 +40,11 @@ public class Language {
         this.name = name;
     }
 
-//    public Set<Person> getPersonList() {
-//        return personList;
-//    }
-//
-//    public void setPersonList(Set<Person> personList) {
-//        this.personList = personList;
-//    }
+    public Set<Person> getPersonList() {
+        return personList;
+    }
 
-    @Override
-    public String toString() {
-        return "Language{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", personList=" + personList +
-                '}';
+    public void setPersonList(Set<Person> personList) {
+        this.personList = personList;
     }
 }

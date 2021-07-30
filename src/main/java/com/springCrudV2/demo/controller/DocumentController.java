@@ -1,7 +1,7 @@
 package com.springCrudV2.demo.controller;
 
 
-import com.springCrudV2.demo.entity.Document;
+import com.springCrudV2.demo.dto.DocumentDto;
 import com.springCrudV2.demo.service.DocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,40 +22,39 @@ public class DocumentController {
     }
 
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Document>> getAll() {
-        List<Document> documentList = documentService.getAll();
-
-        return documentList != null || !documentList.isEmpty()
-                ? new ResponseEntity<>(documentList, HttpStatus.OK)
+    public ResponseEntity<List<DocumentDto>> getAll() {
+        List<DocumentDto> dtoList = documentService.getAll();
+        return dtoList != null || !dtoList.isEmpty()
+                ? new ResponseEntity<>(dtoList, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Document> getById(@PathVariable(name = "id") String id) {
-        Document document = documentService.getDocumentById(id);
-
-        return document != null
-                ? new ResponseEntity<>(document, HttpStatus.OK)
+    public ResponseEntity<DocumentDto> getById(@PathVariable(name = "id") String id) {
+        DocumentDto dto = documentService.getDocumentById(id);
+        return dto != null
+                ? new ResponseEntity<>(dto, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping(value = "/")
-    public ResponseEntity<Document> save(@RequestBody Document document) {
-        documentService.save(document);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<DocumentDto> save(@RequestBody DocumentDto dto) {
+        documentService.save(dto);
+        return dto != null
+                ? new ResponseEntity<>(dto, HttpStatus.CREATED)
+                : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Document> update(@PathVariable(name = "id") @RequestBody Document document) {
-        Document updateDocument = documentService.save(document);
-
+    public ResponseEntity<DocumentDto> update(@PathVariable(name = "id") @RequestBody DocumentDto dto) {
+        DocumentDto updateDocument = documentService.save(dto);
         return updateDocument != null
                 ? new ResponseEntity<>(HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Document> deleteById(@PathVariable(name = "id") String id) {
+    public ResponseEntity<DocumentDto> deleteById(@PathVariable(name = "id") String id) {
         documentService.deleteByNumber(id);
         return id != null
                 ? new ResponseEntity<>(HttpStatus.OK)

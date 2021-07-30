@@ -1,26 +1,15 @@
-package com.springCrudV2.demo.entity;
+package com.springCrudV2.demo.dto;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import com.springCrudV2.demo.entity.Person;
+
 import java.util.List;
 
-@Entity
-@Table(name = "department")
-public class Department {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class DepartmentDto {
     private Long id;
-    @NotNull
-    @Column(name = "name", unique = true, nullable = false)
     private String name;
-    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Person> personList;
 
-    public Department() {
-    }
-
-    public Department(String name) {
-        this.name = name;
+    public DepartmentDto() {
     }
 
     public Long getId() {

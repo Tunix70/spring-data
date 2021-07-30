@@ -1,22 +1,16 @@
-package com.springCrudV2.demo.entity;
+package com.springCrudV2.demo.dto;
 
-import javax.persistence.*;
+import com.springCrudV2.demo.entity.Person;
+
 import java.sql.Date;
 
-@Entity
-@Table(name = "document")
-public class Document {
-    @Id
-    @Column(name = "id")
+public class DocumentDto {
     private String number;
-    @Column(name = "expiry_date")
     private Date expiry_date;
-    @OneToOne(mappedBy = "document")
     private Person person;
 
-    public Document() {
+    public DocumentDto() {
     }
-
 
     public String getNumber() {
         return number;
@@ -41,5 +35,4 @@ public class Document {
     public void setPerson(Person person) {
         this.person = person;
     }
-
 }
