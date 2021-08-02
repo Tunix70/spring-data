@@ -5,6 +5,7 @@ import com.springCrudV2.demo.dto.PersonDto;
 import com.springCrudV2.demo.entity.Department;
 import com.springCrudV2.demo.entity.Person;
 import com.springCrudV2.demo.mapperDto.PersonMapperDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,32 +14,31 @@ import java.util.stream.Collectors;
 @Service
 public class PersonService {
     private PersonRepository personRepository;
-    private PersonDto dto;
-    private PersonMapperDto personMapperDto = new PersonMapperDto();
-    private List<PersonDto> personDtos;
+    private PersonMapperDto personMapperDto;
 
-    public PersonService(PersonRepository personRepository) {
+    @Autowired
+    public PersonService(PersonRepository personRepository, PersonMapperDto personMapperDto) {
         this.personRepository = personRepository;
+        this.personMapperDto = personMapperDto;
     }
 
     public List<PersonDto> getAll(){
         List<Person> departmentList = personRepository.findAll();
-        personDtos = departmentList.stream()
+        return departmentList.stream()
                 .map(personMapperDto::mapToDepartmentDto)
                 .collect(Collectors.toList());
-        return personDtos;
     }
 
     public PersonDto getPersonById(Long id) {
         Person person = personRepository.findById(id).orElse(null);
-        dto = personMapperDto.mapToDepartmentDto(person);
+        PersonDto dto = personMapperDto.mapToDepartmentDto(person);
         return dto;
-
     }
 
     public PersonDto save(PersonDto dto) {
         Person person = personMapperDto.mapToDepartmentEntity(dto);
-        personRepository.save(person);
+        Person savePerson = personRepository.save(person);
+        dto.setId(savePerson.getId());
         return dto;
     }
 

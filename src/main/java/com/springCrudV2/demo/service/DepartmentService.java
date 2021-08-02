@@ -4,6 +4,7 @@ import com.springCrudV2.demo.dao.DepartmentRepository;
 import com.springCrudV2.demo.dto.DepartmentDto;
 import com.springCrudV2.demo.entity.Department;
 import com.springCrudV2.demo.mapperDto.DepartmentMapperDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,32 +13,32 @@ import java.util.stream.Collectors;
 @Service
 public class DepartmentService {
     private DepartmentRepository departmentRepository;
-    private DepartmentDto dto;
-    private List<DepartmentDto> departmentDtos;
-    private DepartmentMapperDto departmentMapperDto = new DepartmentMapperDto();
+    private DepartmentMapperDto departmentMapperDto;
 
-    public DepartmentService(DepartmentRepository departmentRepository) {
+    @Autowired
+    public DepartmentService(DepartmentRepository departmentRepository, DepartmentMapperDto departmentMapperDto) {
         this.departmentRepository = departmentRepository;
+        this.departmentMapperDto = departmentMapperDto;
     }
 
     public List<DepartmentDto> getAll() {
         List<Department> departmentList = departmentRepository.findAll();
-        departmentDtos = departmentList.stream()
+        return departmentList.stream()
                 .map(departmentMapperDto::mapToDepartmentDto)
                 .collect(Collectors.toList());
-        return departmentDtos;
     }
 
     public DepartmentDto getDepartmentById(Long id) {
         Department department = departmentRepository.findById(id).orElse(null);
-        dto = departmentMapperDto.mapToDepartmentDto(department);
+        DepartmentDto dto = departmentMapperDto.mapToDepartmentDto(department);
         return dto;
     }
 
-    public DepartmentDto save(DepartmentDto departmentDto) {
-        Department department = departmentMapperDto.mapToDepartmentEntity(departmentDto);
-        departmentRepository.save(department);
-        return departmentDto;
+    public DepartmentDto save(DepartmentDto dto) {
+        Department department = departmentMapperDto.mapToDepartmentEntity(dto);
+        Department saveDepartment = departmentRepository.save(department);
+        dto.setId(saveDepartment.getId());
+        return dto;
     }
 
     public void deleteById(Long id) {

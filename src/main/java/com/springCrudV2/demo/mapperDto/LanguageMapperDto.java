@@ -2,9 +2,10 @@ package com.springCrudV2.demo.mapperDto;
 
 import com.springCrudV2.demo.dto.LanguageDto;
 import com.springCrudV2.demo.entity.Language;
+import org.springframework.stereotype.Component;
 
+@Component
 public class LanguageMapperDto {
-
     public LanguageDto mapToDepartmentDto(Language language) {
         LanguageDto dto = new LanguageDto();
 

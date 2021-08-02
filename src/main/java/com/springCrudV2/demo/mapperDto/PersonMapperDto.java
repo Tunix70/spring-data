@@ -2,13 +2,23 @@ package com.springCrudV2.demo.mapperDto;
 
 import com.springCrudV2.demo.dto.PersonDto;
 import com.springCrudV2.demo.entity.Person;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
+@Component
 public class PersonMapperDto {
-    DepartmentMapperDto departmentMapperDto = new DepartmentMapperDto();
-    LanguageMapperDto languageMapperDto = new LanguageMapperDto();
-    DocumentMapperDto documentMapperDto = new DocumentMapperDto();
+    DepartmentMapperDto departmentMapperDto;
+    LanguageMapperDto languageMapperDto;
+    DocumentMapperDto documentMapperDto;
+
+    @Autowired
+    public PersonMapperDto(DepartmentMapperDto departmentMapperDto, LanguageMapperDto languageMapperDto, DocumentMapperDto documentMapperDto) {
+        this.departmentMapperDto = departmentMapperDto;
+        this.languageMapperDto = languageMapperDto;
+        this.documentMapperDto = documentMapperDto;
+    }
 
     public PersonDto mapToDepartmentDto(Person person) {
         PersonDto dto = new PersonDto();
