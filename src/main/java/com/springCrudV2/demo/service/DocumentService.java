@@ -29,8 +29,8 @@ public class DocumentService {
         return documentDtos;
     }
 
-    public DocumentDto getDocumentById(String number) {
-        Document document = documentRepository.getByNumber(number);
+    public DocumentDto getDocumentById(String id) {
+        Document document = documentRepository.getById(id);
         dto = documentMapperDto.mapToDepartmentDto(document);
         return dto;
 
@@ -42,7 +42,7 @@ public class DocumentService {
         return documentDto;
     }
 
-    public void deleteByNumber(String number) {
-        documentRepository.deleteByNumber(number);
+    public void deleteByNumber(String id) {
+        documentRepository.deleteById(id);
     }
 }

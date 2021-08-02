@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DocumentRepository extends JpaRepository<Document, String> {
-    Document getByNumber (String number);
-    void deleteByNumber(String number);
+    Document getById (String id);
+    void deleteById(String id);
 }

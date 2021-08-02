@@ -1,9 +1,5 @@
 package com.springCrudV2.demo.dto;
 
-import com.springCrudV2.demo.entity.Department;
-import com.springCrudV2.demo.entity.Document;
-import com.springCrudV2.demo.entity.Language;
-
 import java.sql.Date;
 import java.util.Set;
 
@@ -12,21 +8,11 @@ public class PersonDto {
     private String first_name;
     private String second_name;
     private Date birthday;
-    private Department department;
-    private Set<Language> languageList;
-    private Document document;
+    private DepartmentDto departmentDto;
+    private Set<LanguageDto> languages;
+    private DocumentDto documentDto;
 
     public PersonDto() {
-    }
-
-    public PersonDto(Long id, String first_name, String second_name, Date birthday, Department department, Set<Language> languageList, Document document) {
-        this.id = id;
-        this.first_name = first_name;
-        this.second_name = second_name;
-        this.birthday = birthday;
-        this.department = department;
-        this.languageList = languageList;
-        this.document = document;
     }
 
     public Long getId() {
@@ -61,27 +47,27 @@ public class PersonDto {
         this.birthday = birthday;
     }
 
-    public Department getDepartment() {
-        return department;
+    public DepartmentDto getDepartmentDto() {
+        return departmentDto;
     }
 
-    public void setDepartment(Department department) {
-        this.department = department;
+    public void setDepartmentDto(DepartmentDto departmentDto) {
+        this.departmentDto = departmentDto;
     }
 
-    public Set<Language> getLanguageList() {
-        return languageList;
+    public Set<LanguageDto> getLanguages() {
+        return languages;
     }
 
-    public void setLanguageList(Set<Language> languageList) {
-        this.languageList = languageList;
+    public void setLanguages(Set<LanguageDto> languages) {
+        this.languages = languages;
     }
 
-    public Document getDocument() {
-        return document;
+    public DocumentDto getDocumentDto() {
+        return documentDto;
     }
 
-    public void setDocument(Document document) {
-        this.document = document;
+    public void setDocumentDto(DocumentDto documentDto) {
+        this.documentDto = documentDto;
     }
 }

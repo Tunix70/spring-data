@@ -53,6 +53,4 @@ public class PersonService {
     public void deleteList (List<Person> personList){
         personRepository.deleteAll(personList);
     }
-
-
 }

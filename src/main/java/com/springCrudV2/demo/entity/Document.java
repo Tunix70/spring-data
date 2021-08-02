@@ -8,7 +8,7 @@ import java.sql.Date;
 public class Document {
     @Id
     @Column(name = "id")
-    private String number;
+    private String id;
     @Column(name = "expiry_date")
     private Date expiry_date;
     @OneToOne(mappedBy = "document")
@@ -17,13 +17,12 @@ public class Document {
     public Document() {
     }
 
-
-    public String getNumber() {
-        return number;
+    public String getId() {
+        return id;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public Date getExpiry_date() {
@@ -41,5 +40,4 @@ public class Document {
     public void setPerson(Person person) {
         this.person = person;
     }
-
 }

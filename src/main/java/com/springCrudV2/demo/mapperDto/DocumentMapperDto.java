@@ -8,7 +8,7 @@ public class DocumentMapperDto {
         DocumentDto dto = new DocumentDto();
 
         if (document != null) {
-            dto.setNumber(document.getNumber());
+            dto.setId(document.getId());
             dto.setExpiry_date(document.getExpiry_date());
 //            dto.setPerson(document.getPerson());
             return dto;
@@ -20,7 +20,7 @@ public class DocumentMapperDto {
         Document document = new Document();
 
         if (dto != null) {
-            document.setNumber(dto.getNumber());
+            document.setId(dto.getId());
             document.setExpiry_date(dto.getExpiry_date());
             document.setPerson(dto.getPerson());
             return document;
