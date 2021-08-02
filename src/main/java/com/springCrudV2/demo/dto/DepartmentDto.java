@@ -7,7 +7,6 @@ import java.util.List;
 public class DepartmentDto {
     private Long id;
     private String name;
-    private List<Person> personList;
 
     public DepartmentDto() {
     }
@@ -28,11 +27,4 @@ public class DepartmentDto {
         this.name = name;
     }
 
-    public List<Person> getPersonList() {
-        return personList;
-    }
-
-    public void setPersonList(List<Person> personList) {
-        this.personList = personList;
-    }
 }

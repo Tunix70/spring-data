@@ -10,7 +10,6 @@ public class DocumentMapperDto {
         if (document != null) {
             dto.setId(document.getId());
             dto.setExpiry_date(document.getExpiry_date());
-//            dto.setPerson(document.getPerson());
             return dto;
         } else
             return null;
@@ -22,7 +21,6 @@ public class DocumentMapperDto {
         if (dto != null) {
             document.setId(dto.getId());
             document.setExpiry_date(dto.getExpiry_date());
-            document.setPerson(dto.getPerson());
             return document;
         } else
             return null;

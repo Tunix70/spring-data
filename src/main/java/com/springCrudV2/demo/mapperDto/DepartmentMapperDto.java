@@ -10,7 +10,6 @@ public class DepartmentMapperDto {
         if (department != null) {
             dto.setId(department.getId());
             dto.setName(department.getName());
-//            dto.setPersonList(department.getPersonList());
             return dto;
         } else
             return null;
@@ -22,7 +21,6 @@ public class DepartmentMapperDto {
         if (dto != null) {
             department.setId(dto.getId());
             department.setName(dto.getName());
-            department.setPersonList(dto.getPersonList());
             return department;
         } else
             return null;
