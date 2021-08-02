@@ -1,9 +1,5 @@
 package com.springCrudV2.demo.dto;
 
-import com.springCrudV2.demo.entity.Person;
-
-import java.util.List;
-
 public class DepartmentDto {
     private Long id;
     private String name;

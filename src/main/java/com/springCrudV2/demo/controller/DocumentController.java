@@ -21,7 +21,7 @@ public class DocumentController {
         this.documentService = documentService;
     }
 
-    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<DocumentDto>> getAll() {
         List<DocumentDto> dtoList = documentService.getAll();
         return dtoList != null || !dtoList.isEmpty()
@@ -29,7 +29,7 @@ public class DocumentController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "{id}")
     public ResponseEntity<DocumentDto> getById(@PathVariable(name = "id") String id) {
         DocumentDto dto = documentService.getDocumentById(id);
         return dto != null
@@ -37,7 +37,7 @@ public class DocumentController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping(value = "/")
+    @PostMapping(value = "")
     public ResponseEntity<DocumentDto> save(@RequestBody DocumentDto dto) {
         documentService.save(dto);
         return dto != null
@@ -45,15 +45,15 @@ public class DocumentController {
                 : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<DocumentDto> update(@PathVariable(name = "id") @RequestBody DocumentDto dto) {
+    @PutMapping(value = "")
+    public ResponseEntity<DocumentDto> update(@RequestBody DocumentDto dto) {
         DocumentDto updateDocument = documentService.save(dto);
         return updateDocument != null
                 ? new ResponseEntity<>(HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = "{id}")
     public ResponseEntity<DocumentDto> deleteById(@PathVariable(name = "id") String id) {
         documentService.deleteByNumber(id);
         return id != null
