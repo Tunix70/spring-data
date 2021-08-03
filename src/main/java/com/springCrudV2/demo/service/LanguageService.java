@@ -1,6 +1,5 @@
 package com.springCrudV2.demo.service;
 
-
 import com.springCrudV2.demo.dao.LanguageRepository;
 import com.springCrudV2.demo.dto.LanguageDto;
 import com.springCrudV2.demo.entity.Language;
@@ -31,16 +30,6 @@ public class LanguageService {
                 .collect(Collectors.toSet());
     }
 
-    public Set<LanguageDto> getSetById(Set<Long> setId) {
-        Set<LanguageDto> languageSet = new HashSet<>();
-        for (Long id : setId) {
-            Language language = languageRepository.getById(id);
-            LanguageDto dto = languageMapperDto.mapToLanguageDto(language);
-            languageSet.add(dto);
-        }
-        return languageSet;
-    }
-
     public LanguageDto getLanguageById(Long id) {
         Language language = languageRepository.findById(id).orElse(null);
         return languageMapperDto.mapToLanguageDto(language);
@@ -58,6 +47,11 @@ public class LanguageService {
     }
 
     public Language getEntity(LanguageDto dto) {
+        if(dto == null) {
+            throw new ClassCastException("LANGUAGE");
+        } else
         return languageMapperDto.mapToLanguageEntity(dto);
     }
+
+
 }

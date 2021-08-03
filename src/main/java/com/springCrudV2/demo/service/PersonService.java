@@ -6,11 +6,13 @@ import com.springCrudV2.demo.dto.DocumentDto;
 import com.springCrudV2.demo.dto.PersonDto;
 import com.springCrudV2.demo.entity.Language;
 import com.springCrudV2.demo.entity.Person;
+import com.springCrudV2.demo.exception.NotFoundLanguageException;
 import com.springCrudV2.demo.mapperDto.PersonMapperDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -68,6 +70,7 @@ public class PersonService {
                 .map(languageService::getLanguageById)
                 .map(languageService::getEntity)
                 .collect(Collectors.toSet());
+
         person.setLanguageList(dtoSet);
         return person;
     }
