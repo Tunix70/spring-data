@@ -40,11 +40,4 @@ public class Language {
         this.name = name;
     }
 
-    public Set<Person> getPersonList() {
-        return personList;
-    }
-
-    public void setPersonList(Set<Person> personList) {
-        this.personList = personList;
-    }
 }

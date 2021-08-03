@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DocumentMapperDto {
-    public DocumentDto mapToDepartmentDto(Document document) {
+    public DocumentDto mapToDocumentDto(Document document) {
         DocumentDto dto = new DocumentDto();
 
         if (document != null) {
@@ -17,7 +17,7 @@ public class DocumentMapperDto {
             return null;
     }
 
-    public Document mapToDepartmentEntity(DocumentDto dto) {
+    public Document mapToDocumentEntity(DocumentDto dto) {
         Document document = new Document();
 
         if (dto != null) {

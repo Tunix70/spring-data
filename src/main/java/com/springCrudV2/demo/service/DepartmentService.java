@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class DepartmentService {
-    private DepartmentRepository departmentRepository;
-    private DepartmentMapperDto departmentMapperDto;
+    private final DepartmentRepository departmentRepository;
+    private final DepartmentMapperDto departmentMapperDto;
 
     @Autowired
     public DepartmentService(DepartmentRepository departmentRepository, DepartmentMapperDto departmentMapperDto) {
@@ -30,8 +30,7 @@ public class DepartmentService {
 
     public DepartmentDto getDepartmentById(Long id) {
         Department department = departmentRepository.findById(id).orElse(null);
-        DepartmentDto dto = departmentMapperDto.mapToDepartmentDto(department);
-        return dto;
+        return departmentMapperDto.mapToDepartmentDto(department);
     }
 
     public DepartmentDto save(DepartmentDto dto) {
@@ -43,5 +42,9 @@ public class DepartmentService {
 
     public void deleteById(Long id) {
         departmentRepository.deleteById(id);
+    }
+
+    public Department getEntity(DepartmentDto dto) {
+        return departmentMapperDto.mapToDepartmentEntity(dto);
     }
 }

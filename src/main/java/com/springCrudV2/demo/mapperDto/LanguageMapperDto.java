@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class LanguageMapperDto {
-    public LanguageDto mapToDepartmentDto(Language language) {
+    public LanguageDto mapToLanguageDto(Language language) {
         LanguageDto dto = new LanguageDto();
 
         if (language != null) {
@@ -17,7 +17,7 @@ public class LanguageMapperDto {
             return null;
     }
 
-    public Language mapToDepartmentEntity(LanguageDto dto) {
+    public Language mapToLanguageEntity(LanguageDto dto) {
         Language language = new Language();
 
         if (dto != null) {

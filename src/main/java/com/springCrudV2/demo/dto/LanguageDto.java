@@ -2,6 +2,8 @@ package com.springCrudV2.demo.dto;
 
 public class LanguageDto {
     private Long id;
+    private String name;
+
 
     public LanguageDto() {
     }
@@ -13,4 +15,13 @@ public class LanguageDto {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 }

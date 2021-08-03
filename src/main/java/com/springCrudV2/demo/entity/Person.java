@@ -6,7 +6,10 @@ import java.sql.Date;
 import java.util.Set;
 
 @Entity
-@Table(name = "person")
+@Table(name = "person",
+        uniqueConstraints = @UniqueConstraint(
+        name = "uk_document_id",
+        columnNames = {"document_id"}))
 public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,10 +25,13 @@ public class Person {
     private Department department;
     @ManyToMany
     @JoinTable(name = "person_language",
+            uniqueConstraints = @UniqueConstraint(
+                    name = "uk_person_language_id",
+                    columnNames = {"person_id", "language_id"}),
             joinColumns = @JoinColumn(name = "person_id"),
             inverseJoinColumns = @JoinColumn(name = "language_id"))
     private Set<Language> languageList;
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.MERGE, orphanRemoval = true)
     @JoinColumn(name = "document_id", referencedColumnName = "id")
     private Document document;
 
@@ -95,6 +101,9 @@ public class Person {
                 ", first_name='" + first_name + '\'' +
                 ", second_name='" + second_name + '\'' +
                 ", birthday=" + birthday +
+                ", department=" + department +
+                ", languageList=" + languageList +
+                ", document=" + document +
                 '}';
     }
 }

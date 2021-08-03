@@ -39,11 +39,5 @@ public class Department {
         this.name = name;
     }
 
-    public List<Person> getPersonList() {
-        return personList;
-    }
 
-    public void setPersonList(List<Person> personList) {
-        this.personList = personList;
-    }
 }

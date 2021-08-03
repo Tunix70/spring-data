@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DepartmentMapperDto {
+
     public DepartmentDto mapToDepartmentDto(Department department) {
         DepartmentDto dto = new DepartmentDto();
 

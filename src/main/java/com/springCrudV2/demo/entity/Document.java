@@ -33,11 +33,5 @@ public class Document {
         this.expiry_date = expiry_date;
     }
 
-    public Person getPerson() {
-        return person;
-    }
 
-    public void setPerson(Person person) {
-        this.person = person;
-    }
 }

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/languages")
@@ -22,8 +23,8 @@ public class LanguageController {
     }
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<LanguageDto>> getAll() {
-        List<LanguageDto> languageList = languageService.getAll();
+    public ResponseEntity<Set<LanguageDto>> getAll() {
+        Set<LanguageDto> languageList = languageService.getAll();
         return languageList != null || !languageList.isEmpty()
                 ? new ResponseEntity<>(languageList, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);

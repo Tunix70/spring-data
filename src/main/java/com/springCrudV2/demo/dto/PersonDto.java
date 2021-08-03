@@ -8,9 +8,9 @@ public class PersonDto {
     private String first_name;
     private String second_name;
     private Date birthday;
-    private DepartmentDto departmentDto;
-    private Set<LanguageDto> languages;
-    private DocumentDto documentDto;
+    private Long department;
+    private Set<Long> languages;
+    private String document;
 
     public PersonDto() {
     }
@@ -47,27 +47,27 @@ public class PersonDto {
         this.birthday = birthday;
     }
 
-    public DepartmentDto getDepartmentDto() {
-        return departmentDto;
+    public Long getDepartment() {
+        return department;
     }
 
-    public void setDepartmentDto(DepartmentDto departmentDto) {
-        this.departmentDto = departmentDto;
+    public void setDepartment(Long department) {
+        this.department = department;
     }
 
-    public Set<LanguageDto> getLanguages() {
+    public Set<Long> getLanguages() {
         return languages;
     }
 
-    public void setLanguages(Set<LanguageDto> languages) {
+    public void setLanguages(Set<Long> languages) {
         this.languages = languages;
     }
 
-    public DocumentDto getDocumentDto() {
-        return documentDto;
+    public String getDocument() {
+        return document;
     }
 
-    public void setDocumentDto(DocumentDto documentDto) {
-        this.documentDto = documentDto;
+    public void setDocument(String document) {
+        this.document = document;
     }
 }

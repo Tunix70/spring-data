@@ -1,6 +1,7 @@
 package com.springCrudV2.demo.mapperDto;
 
 import com.springCrudV2.demo.dto.PersonDto;
+import com.springCrudV2.demo.entity.Language;
 import com.springCrudV2.demo.entity.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,7 +21,7 @@ public class PersonMapperDto {
         this.documentMapperDto = documentMapperDto;
     }
 
-    public PersonDto mapToDepartmentDto(Person person) {
+    public PersonDto mapToPersonDto(Person person) {
         PersonDto dto = new PersonDto();
 
         if (person != null) {
@@ -28,17 +29,17 @@ public class PersonMapperDto {
             dto.setFirst_name(person.getFirst_name());
             dto.setSecond_name(person.getSecond_name());
             dto.setBirthday(person.getBirthday());
-            dto.setDepartmentDto(departmentMapperDto.mapToDepartmentDto(person.getDepartment()));
-            dto.setDocumentDto(documentMapperDto.mapToDepartmentDto(person.getDocument()));
+            dto.setDepartment(person.getDepartment().getId());
+            dto.setDocument(person.getDocument().getId());
             dto.setLanguages(person.getLanguageList().stream()
-                                                .map(languageMapperDto :: mapToDepartmentDto)
-                                                .collect(Collectors.toSet()));
+                    .map(Language :: getId)
+                    .collect(Collectors.toSet()));
             return dto;
         } else
             return null;
     }
 
-    public Person mapToDepartmentEntity(PersonDto dto) {
+    public Person mapToPersonEntity(PersonDto dto) {
         Person person = new Person();
 
         if (dto != null) {
@@ -46,11 +47,6 @@ public class PersonMapperDto {
             person.setFirst_name(dto.getFirst_name());
             person.setSecond_name(dto.getSecond_name());
             person.setBirthday(dto.getBirthday());
-            person.setDepartment(departmentMapperDto.mapToDepartmentEntity(dto.getDepartmentDto()));
-            person.setDocument(documentMapperDto.mapToDepartmentEntity(dto.getDocumentDto()));
-            person.setLanguageList(dto.getLanguages().stream()
-                                                .map(languageMapperDto :: mapToDepartmentEntity)
-                                                .collect(Collectors.toSet()));
             return person;
         } else
             return null;
