@@ -9,8 +9,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
+
 
 @RestController
 @RequestMapping("/languages")
@@ -31,34 +33,25 @@ public class LanguageController {
     }
 
     @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<LanguageDto> getById(@PathVariable("id") Long id) {
+    public ResponseEntity<LanguageDto> getById(@PathVariable("id") @Min(1) @NotNull Long id) {
         LanguageDto language = languageService.getLanguageById(id);
-        return language != null
-                ? new ResponseEntity<>(language, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(language, HttpStatus.OK);
     }
 
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<LanguageDto> save(@RequestBody LanguageDto dto) {
-        LanguageDto saveLanguage = languageService.save(dto);
-        return dto != null
-                ? new ResponseEntity<>(saveLanguage, HttpStatus.CREATED)
-                : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(languageService.save(dto), HttpStatus.OK);
     }
 
     @PutMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<LanguageDto> update(@RequestBody LanguageDto dto) {
-        languageService.save(dto);
-        return dto.getId() != null
-                ? new ResponseEntity<>(HttpStatus.NOT_MODIFIED)
-                : new ResponseEntity<>(dto, HttpStatus.OK);
+        languageService.isValidId(dto.getId());
+        return new ResponseEntity<>(languageService.save(dto), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Language> deleteById(@PathVariable("id") Long id) {
+    public ResponseEntity<Language> deleteById(@PathVariable("id") @Min(1) @NotNull Long id) {
         languageService.deleteById(id);
-        return id != null
-                ? new ResponseEntity<>(HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

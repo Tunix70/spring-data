@@ -9,6 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @RestController
@@ -30,34 +32,24 @@ public class DocumentController {
     }
 
     @GetMapping(value = "{id}")
-    public ResponseEntity<DocumentDto> getById(@PathVariable(name = "id") String id) {
-        DocumentDto dto = documentService.getDocumentById(id);
-        return dto != null
-                ? new ResponseEntity<>(dto, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<DocumentDto> getById(@PathVariable(name = "id") @NotBlank String id) {
+        return new ResponseEntity<>(documentService.getDocumentById(id), HttpStatus.OK);
     }
 
     @PostMapping(value = "")
-    public ResponseEntity<DocumentDto> save(@RequestBody DocumentDto dto) {
-        documentService.save(dto);
-        return dto != null
-                ? new ResponseEntity<>(dto, HttpStatus.CREATED)
-                : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<DocumentDto> save(@Valid @RequestBody DocumentDto dto) {
+        return new ResponseEntity<>(documentService.save(dto), HttpStatus.CREATED);
     }
 
     @PutMapping(value = "")
-    public ResponseEntity<DocumentDto> update(@RequestBody DocumentDto dto) {
-        DocumentDto updateDocument = documentService.save(dto);
-        return updateDocument != null
-                ? new ResponseEntity<>(HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+    public ResponseEntity<DocumentDto> update(@Valid @RequestBody DocumentDto dto) {
+        documentService.isValidId(dto.getId());
+        return new ResponseEntity<>(documentService.save(dto), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "{id}")
-    public ResponseEntity<DocumentDto> deleteById(@PathVariable(name = "id") String id) {
+    public ResponseEntity<DocumentDto> deleteById(@PathVariable(name = "id") @NotBlank String id) {
         documentService.deleteByNumber(id);
-        return id != null
-                ? new ResponseEntity<>(HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -32,6 +32,4 @@ public class Document {
     public void setExpiry_date(Date expiry_date) {
         this.expiry_date = expiry_date;
     }
-
-
 }

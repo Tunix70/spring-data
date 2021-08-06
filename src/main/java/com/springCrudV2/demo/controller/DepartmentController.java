@@ -6,10 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
+@Validated
 @RestController
 @RequestMapping("/departments")
 public class DepartmentController {
@@ -29,34 +34,25 @@ public class DepartmentController {
     }
 
     @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DepartmentDto> getById(@PathVariable("id") Long id) {
+    public ResponseEntity<DepartmentDto> getById(@PathVariable("id") @Min(1) @NotNull Long id) {
         DepartmentDto dto = departmentService.getDepartmentById(id);
-        return dto != null
-                ? new ResponseEntity<>(dto, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DepartmentDto> save(@RequestBody DepartmentDto departmentDto) {
-        DepartmentDto saveDepartment = departmentService.save(departmentDto);
-        return departmentDto != null
-                ? new ResponseEntity<>(saveDepartment, HttpStatus.CREATED)
-                : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<DepartmentDto> save(@Valid @NotNull @RequestBody DepartmentDto departmentDto) {
+        return new ResponseEntity<>(departmentService.save(departmentDto), HttpStatus.CREATED);
     }
 
     @PutMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DepartmentDto> update(@RequestBody DepartmentDto departmentDto) {
-        DepartmentDto updateDepartment = departmentService.save(departmentDto);
-        return updateDepartment != null
-                ? new ResponseEntity<>(updateDepartment, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+    public ResponseEntity<DepartmentDto> update(@Valid @NotNull @RequestBody DepartmentDto departmentDto) {
+        departmentService.isValidId(departmentDto.getId());
+        return new ResponseEntity<>(departmentService.save(departmentDto), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DepartmentDto> deleteById(@PathVariable("id") Long id) {
+    public ResponseEntity<DepartmentDto> deleteById(@PathVariable("id") @Min(1) @NotNull Long id) {
         departmentService.deleteById(id);
-        return id != null
-                ? new ResponseEntity<>(HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

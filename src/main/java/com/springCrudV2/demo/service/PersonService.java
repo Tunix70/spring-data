@@ -6,13 +6,12 @@ import com.springCrudV2.demo.dto.DocumentDto;
 import com.springCrudV2.demo.dto.PersonDto;
 import com.springCrudV2.demo.entity.Language;
 import com.springCrudV2.demo.entity.Person;
-import com.springCrudV2.demo.exception.NotFoundLanguageException;
+import com.springCrudV2.demo.exception.*;
 import com.springCrudV2.demo.mapperDto.PersonMapperDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -42,14 +41,16 @@ public class PersonService {
     }
 
     public PersonDto getPersonById(Long id) {
-        Person person = personRepository.findById(id).orElse(null);
+        isValidId(id);
+        Person person = personRepository.findById(id).orElseThrow(() -> new PersonNotFoundException(id));
         return personMapperDto.mapToPersonDto(person);
     }
 
     public PersonDto save(PersonDto dto) {
-            Person person = fillFieldsPerson(dto);
-            Person savePerson = personRepository.save(person);
-            dto.setId(savePerson.getId());
+        isValidDto(dto);
+        Person person = fillFieldsPerson(dto);
+        Person savePerson = personRepository.save(person);
+        dto.setId(savePerson.getId());
         return dto;
     }
 
@@ -61,7 +62,7 @@ public class PersonService {
         Person person = personMapperDto.mapToPersonEntity(dto);
 
         DocumentDto documentDto = documentService.getDocumentById(dto.getDocument());
-        person.setDocument(documentService.getEntyty(documentDto));
+        person.setDocument(documentService.getEntity(documentDto));
 
         DepartmentDto departmentDto = departmentService.getDepartmentById(dto.getDepartment());
         person.setDepartment(departmentService.getEntity(departmentDto));
@@ -73,5 +74,28 @@ public class PersonService {
 
         person.setLanguageList(dtoSet);
         return person;
+    }
+
+    public boolean isValidId(Long id) {
+        if (id == null || id <= 1L || personRepository.existsById(id))
+            throw new DepartmentNotFoundException(id);
+        return true;
+    }
+
+    public boolean isValidDto(PersonDto dto) {
+        if (!documentService.isExist(dto.getDocument()))
+            throw new DocumentNotFoundException(dto.getDocument());
+        if (!departmentService.isExistById(dto.getDepartment()))
+            throw new DepartmentNotFoundException(dto.getDepartment());
+        for (Long language : dto.getLanguages()) {
+            if (!languageService.isExist(languageService.getLanguageById(language)))
+                throw new LanguageNotFoundException(language);
+        }
+        List<Person> list = personRepository.findAll();
+        for (Person person : list) {
+            if (person != null && person.getDocument().getId().equals(dto.getDocument()))
+                throw new DocumentAlreadyTakenException();
+        }
+        return true;
     }
 }
