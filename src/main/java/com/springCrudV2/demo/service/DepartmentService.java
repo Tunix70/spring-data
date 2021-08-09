@@ -3,6 +3,8 @@ package com.springCrudV2.demo.service;
 import com.springCrudV2.demo.dao.DepartmentRepository;
 import com.springCrudV2.demo.dto.DepartmentDto;
 import com.springCrudV2.demo.entity.Department;
+import com.springCrudV2.demo.exception.DepartmentAlreadyExistException;
+import com.springCrudV2.demo.exception.DepartmentNotFoundException;
 import com.springCrudV2.demo.mapperDto.DepartmentMapperDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,11 +31,13 @@ public class DepartmentService {
     }
 
     public DepartmentDto getDepartmentById(Long id) {
-        Department department = departmentRepository.findById(id).orElse(null);
+        Department department = departmentRepository.findById(id).orElseThrow(() -> new DepartmentNotFoundException(id));
         return departmentMapperDto.mapToDepartmentDto(department);
     }
 
     public DepartmentDto save(DepartmentDto dto) {
+        if (isExistByName(dto.getName()))
+            throw new DepartmentAlreadyExistException();
         Department department = departmentMapperDto.mapToDepartmentEntity(dto);
         Department saveDepartment = departmentRepository.save(department);
         dto.setId(saveDepartment.getId());
@@ -41,10 +45,26 @@ public class DepartmentService {
     }
 
     public void deleteById(Long id) {
+        isValidId(id);
         departmentRepository.deleteById(id);
     }
 
     public Department getEntity(DepartmentDto dto) {
         return departmentMapperDto.mapToDepartmentEntity(dto);
     }
+
+    public boolean isValidId(Long id) {
+        if (id == null || id <= 1L || getDepartmentById(id) == null)
+            throw new DepartmentNotFoundException(id);
+        return true;
+    }
+
+    public boolean isExistByName(String name) {
+        return departmentRepository.existsByName(name);
+    }
+
+    public boolean isExistById(Long id) {
+        return departmentRepository.existsById(id);
+    }
+
 }
