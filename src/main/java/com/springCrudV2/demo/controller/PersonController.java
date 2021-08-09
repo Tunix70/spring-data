@@ -10,12 +10,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "/persons")
 public class PersonController {
-    private PersonService personService;
+    private final PersonService personService;
 
     @Autowired
     public PersonController(PersonService personService) {
@@ -31,34 +33,24 @@ public class PersonController {
     }
 
     @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PersonDto> getById(@PathVariable("id") Long id) {
-        PersonDto person = personService.getPersonById(id);
-        return person != null
-                ? new ResponseEntity<>(person, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<PersonDto> getById(@PathVariable("id") @NotNull Long id) {
+        return new ResponseEntity<>(personService.getPersonById(id), HttpStatus.OK);
     }
 
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PersonDto> save(@RequestBody PersonDto personDto) {
-        PersonDto savePerson = personService.save(personDto);
-        return personDto != null
-                ? new ResponseEntity<>(savePerson, HttpStatus.CREATED)
-                : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<PersonDto> save(@Valid @RequestBody PersonDto personDto) {
+        return new ResponseEntity<>(personService.save(personDto), HttpStatus.CREATED);
     }
 
     @PutMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PersonDto> update(@RequestBody PersonDto personDto) {
+    public ResponseEntity<PersonDto> update(@Valid @RequestBody PersonDto personDto) {
         PersonDto updatePerson = personService.save(personDto);
-        return updatePerson != null
-                ? new ResponseEntity<>(updatePerson, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        return new ResponseEntity<>(updatePerson, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Person> deleteById(@PathVariable("id") Long id) {
         personService.deleteById(id);
-        return id != null
-                ? new ResponseEntity<>(HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -1,15 +1,39 @@
 package com.springCrudV2.demo.dto;
 
+import com.springCrudV2.demo.annotation.SmallLettersSubstring;
+import com.springCrudV2.demo.annotation.StartWithCapitalLetter;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.sql.Date;
 import java.util.Set;
 
 public class PersonDto {
     private Long id;
+
+    @NotBlank(message = "Name can't be blank")
+    @StartWithCapitalLetter(message = "Name must start with capital letters")
+    @SmallLettersSubstring(message = "Substring(1) must contain only small letters")
+    @Size(min = 2, max = 100, message = "Name length must be  between 2 and 100")
     private String first_name;
+
+    @NotBlank(message = "Surname can't be blank")
+    @StartWithCapitalLetter(message = "Surname must start with capital letters")
+    @SmallLettersSubstring(message = "Surname substring(1) must contain only small letters")
+    @Size(min = 2, max = 100, message = "Name length must be  between 2 and 100")
     private String second_name;
+
     private Date birthday;
+
+    @NotNull(message = "Department ID can't be null")
     private Long department;
+
+    @NotNull(message = "Language IDs can't be null")
     private Set<Long> languages;
+
+    @NotBlank(message = "Document ID can't be blank")
+    @Size(min = 10, max = 1000, message = "Name length must be  between 10 and 1000")
     private String document;
 
     public PersonDto() {

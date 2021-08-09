@@ -1,11 +1,14 @@
 package com.springCrudV2.demo.dto;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.sql.Date;
 
 public class DocumentDto {
+    @NotBlank(message = "ID can't be blank")
+    @Size(min = 10, max = 1000, message = "Name length must be  between 10 and 1000")
     private String id;
     private Date expiry_date;
-
 
     public DocumentDto() {
     }
