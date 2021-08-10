@@ -3,6 +3,7 @@ package com.springCrudV2.demo.entity;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -36,6 +37,24 @@ public class Person {
     private Document document;
 
     public Person() {
+    }
+
+    public Person(Long id, String first_name, String second_name, Date birthday) {
+        this.id = id;
+        this.first_name = first_name;
+        this.second_name = second_name;
+        this.birthday = birthday;
+    }
+
+    public Person(Long id, String first_name, String second_name, Date birthday, Department department,
+                  Set<Language> languageList, Document document) {
+        this.id = id;
+        this.first_name = first_name;
+        this.second_name = second_name;
+        this.birthday = birthday;
+        this.department = department;
+        this.languageList = languageList;
+        this.document = document;
     }
 
     public Long getId() {
@@ -105,5 +124,18 @@ public class Person {
                 ", languageList=" + languageList +
                 ", document=" + document +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Person person = (Person) o;
+        return id.equals(person.id) && first_name.equals(person.first_name) && second_name.equals(person.second_name) && birthday.equals(person.birthday);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, first_name, second_name, birthday);
     }
 }

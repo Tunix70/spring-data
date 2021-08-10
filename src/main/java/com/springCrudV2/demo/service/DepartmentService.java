@@ -45,7 +45,7 @@ public class DepartmentService {
     }
 
     public void deleteById(Long id) {
-        isValidId(id);
+        isExistById(id);
         departmentRepository.deleteById(id);
     }
 
@@ -53,18 +53,14 @@ public class DepartmentService {
         return departmentMapperDto.mapToDepartmentEntity(dto);
     }
 
-    public boolean isValidId(Long id) {
-        if (id == null || id <= 1L || getDepartmentById(id) == null)
-            throw new DepartmentNotFoundException(id);
-        return true;
-    }
-
-    public boolean isExistByName(String name) {
+    private boolean isExistByName(String name) {
         return departmentRepository.existsByName(name);
     }
 
     public boolean isExistById(Long id) {
-        return departmentRepository.existsById(id);
+        if(!departmentRepository.existsById(id)) {
+            throw new DepartmentNotFoundException(id);
+        }
+        return true;
     }
-
 }

@@ -13,6 +13,11 @@ public class DocumentDto {
     public DocumentDto() {
     }
 
+    public DocumentDto(String id, Date expiry_date) {
+        this.id = id;
+        this.expiry_date = expiry_date;
+    }
+
     public String getId() {
         return id;
     }

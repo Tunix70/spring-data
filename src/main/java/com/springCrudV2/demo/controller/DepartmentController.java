@@ -46,7 +46,7 @@ public class DepartmentController {
 
     @PutMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DepartmentDto> update(@Valid @NotNull @RequestBody DepartmentDto departmentDto) {
-        departmentService.isValidId(departmentDto.getId());
+        departmentService.isExistById(departmentDto.getId());
         return new ResponseEntity<>(departmentService.save(departmentDto), HttpStatus.OK);
     }
 

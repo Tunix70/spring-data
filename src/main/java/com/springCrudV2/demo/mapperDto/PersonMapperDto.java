@@ -10,16 +10,6 @@ import java.util.stream.Collectors;
 
 @Component
 public class PersonMapperDto {
-    DepartmentMapperDto departmentMapperDto;
-    LanguageMapperDto languageMapperDto;
-    DocumentMapperDto documentMapperDto;
-
-    @Autowired
-    public PersonMapperDto(DepartmentMapperDto departmentMapperDto, LanguageMapperDto languageMapperDto, DocumentMapperDto documentMapperDto) {
-        this.departmentMapperDto = departmentMapperDto;
-        this.languageMapperDto = languageMapperDto;
-        this.documentMapperDto = documentMapperDto;
-    }
 
     public PersonDto mapToPersonDto(Person person) {
         PersonDto dto = new PersonDto();

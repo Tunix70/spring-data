@@ -39,6 +39,13 @@ public class PersonDto {
     public PersonDto() {
     }
 
+    public PersonDto(Long id, String first_name, String second_name, Date birthday) {
+        this.id = id;
+        this.first_name = first_name;
+        this.second_name = second_name;
+        this.birthday = birthday;
+    }
+
     public Long getId() {
         return id;
     }
