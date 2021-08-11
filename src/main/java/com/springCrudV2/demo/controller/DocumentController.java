@@ -26,30 +26,40 @@ public class DocumentController {
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<DocumentDto>> getAll() {
         List<DocumentDto> dtoList = documentService.getAll();
-        return dtoList != null || !dtoList.isEmpty()
+        return dtoList != null
                 ? new ResponseEntity<>(dtoList, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping(value = "{id}")
     public ResponseEntity<DocumentDto> getById(@PathVariable(name = "id") @NotBlank String id) {
-        return new ResponseEntity<>(documentService.getDocumentById(id), HttpStatus.OK);
+        DocumentDto dto = documentService.getDocumentById(id);
+        return dto != null
+                ? new ResponseEntity<>(dto, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping(value = "")
     public ResponseEntity<DocumentDto> save(@Valid @RequestBody DocumentDto dto) {
-        return new ResponseEntity<>(documentService.save(dto), HttpStatus.CREATED);
+        documentService.save(dto);
+        return dto != null
+                ? new ResponseEntity<>(dto, HttpStatus.CREATED)
+                : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping(value = "")
     public ResponseEntity<DocumentDto> update(@Valid @RequestBody DocumentDto dto) {
-        documentService.isValidId(dto.getId());
-        return new ResponseEntity<>(documentService.save(dto), HttpStatus.OK);
+        DocumentDto updateDocument = documentService.save(dto);
+        return updateDocument != null
+                ? new ResponseEntity<>(HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
     @DeleteMapping(value = "{id}")
     public ResponseEntity<DocumentDto> deleteById(@PathVariable(name = "id") @NotBlank String id) {
         documentService.deleteByNumber(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return id != null
+                ? new ResponseEntity<>(HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }

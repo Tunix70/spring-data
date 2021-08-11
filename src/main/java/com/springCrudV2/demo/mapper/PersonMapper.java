@@ -1,15 +1,14 @@
-package com.springCrudV2.demo.mapperDto;
+package com.springCrudV2.demo.mapper;
 
 import com.springCrudV2.demo.dto.PersonDto;
 import com.springCrudV2.demo.entity.Language;
 import com.springCrudV2.demo.entity.Person;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
 @Component
-public class PersonMapperDto {
+public class PersonMapper {
 
     public PersonDto mapToPersonDto(Person person) {
         PersonDto dto = new PersonDto();

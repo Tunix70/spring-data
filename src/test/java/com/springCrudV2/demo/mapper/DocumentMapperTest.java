@@ -1,8 +1,6 @@
-package com.springCrudV2.demo.mapperDto;
+package com.springCrudV2.demo.mapper;
 
-import com.springCrudV2.demo.dto.DepartmentDto;
 import com.springCrudV2.demo.dto.DocumentDto;
-import com.springCrudV2.demo.entity.Department;
 import com.springCrudV2.demo.entity.Document;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,10 +8,9 @@ import org.junit.jupiter.api.Test;
 import java.sql.Date;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
-class DocumentMapperDtoTest {
-    private DocumentMapperDto documentMapperDto = new DocumentMapperDto();
+class DocumentMapperTest {
+    private DocumentMapper documentMapper = new DocumentMapper();
     private Date date = new Date(45654625L);
 
     @Test
@@ -24,8 +21,8 @@ class DocumentMapperDtoTest {
         Document document1 = null;
 
         //when
-        DocumentDto dto = documentMapperDto.mapToDocumentDto(document);
-        DocumentDto dto1 = documentMapperDto.mapToDocumentDto(document1);
+        DocumentDto dto = documentMapper.mapToDocumentDto(document);
+        DocumentDto dto1 = documentMapper.mapToDocumentDto(document1);
 
         //than
         assertThat(dto.getId()).isEqualTo(document.getId());
@@ -42,8 +39,8 @@ class DocumentMapperDtoTest {
         DocumentDto dto1 = null;
 
         //when
-        Document document = documentMapperDto.mapToDocumentEntity(dto);
-        Document document1 = documentMapperDto.mapToDocumentEntity(dto1);
+        Document document = documentMapper.mapToDocumentEntity(dto);
+        Document document1 = documentMapper.mapToDocumentEntity(dto1);
 
         //than
         assertThat(document.getId()).isEqualTo(dto.getId());

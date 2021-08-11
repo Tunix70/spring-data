@@ -1,26 +1,21 @@
-package com.springCrudV2.demo.mapperDto;
+package com.springCrudV2.demo.mapper;
 
-import com.springCrudV2.demo.dto.DepartmentDto;
 import com.springCrudV2.demo.dto.PersonDto;
 import com.springCrudV2.demo.entity.Department;
 import com.springCrudV2.demo.entity.Document;
 import com.springCrudV2.demo.entity.Language;
 import com.springCrudV2.demo.entity.Person;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.sql.Date;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
-class PersonMapperDtoTest {
-    private final PersonMapperDto personMapperDto = new PersonMapperDto();
+class PersonMapperTest {
+    private final PersonMapper personMapper = new PersonMapper();
 
     @Test
     @DisplayName("Method should map from entity to dto")
@@ -35,8 +30,8 @@ class PersonMapperDtoTest {
         Person person1 = null;
 
         //when
-        PersonDto dto = personMapperDto.mapToPersonDto(person);
-        PersonDto dto1 = personMapperDto.mapToPersonDto(person1);
+        PersonDto dto = personMapper.mapToPersonDto(person);
+        PersonDto dto1 = personMapper.mapToPersonDto(person1);
 
         //than
         assertThat(dto.getId()).isEqualTo(person.getId());
@@ -62,8 +57,8 @@ class PersonMapperDtoTest {
         PersonDto dto = new PersonDto(1L, "Ivan", "Ivanov", date);
 
         //when
-        Person person = personMapperDto.mapToPersonEntity(dto);
-        Person person1 = personMapperDto.mapToPersonEntity(dto1);
+        Person person = personMapper.mapToPersonEntity(dto);
+        Person person1 = personMapper.mapToPersonEntity(dto1);
 
         //than
         assertThat(person.getId()).isEqualTo(dto.getId());

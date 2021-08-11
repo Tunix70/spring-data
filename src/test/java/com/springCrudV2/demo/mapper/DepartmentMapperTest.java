@@ -1,4 +1,4 @@
-package com.springCrudV2.demo.mapperDto;
+package com.springCrudV2.demo.mapper;
 
 import com.springCrudV2.demo.dto.DepartmentDto;
 import com.springCrudV2.demo.entity.Department;
@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-class DepartmentMapperDtoTest {
-    private DepartmentMapperDto departmentMapperDto = new DepartmentMapperDto();
+class DepartmentMapperTest {
+    private DepartmentMapper departmentMapper = new DepartmentMapper();
 
     @Test
     @DisplayName("Method should map from entity to dto")
@@ -18,8 +18,8 @@ class DepartmentMapperDtoTest {
         Department department1 = null;
 
         //when
-        DepartmentDto dto = departmentMapperDto.mapToDepartmentDto(department);
-        DepartmentDto dto1 = departmentMapperDto.mapToDepartmentDto(department1);
+        DepartmentDto dto = departmentMapper.mapToDepartmentDto(department);
+        DepartmentDto dto1 = departmentMapper.mapToDepartmentDto(department1);
 
         //than
         assertThat(dto.getId()).isEqualTo(department.getId());
@@ -36,8 +36,8 @@ class DepartmentMapperDtoTest {
         DepartmentDto dto1 = null;
 
         //when
-        Department department = departmentMapperDto.mapToDepartmentEntity(dto);
-        Department department1 = departmentMapperDto.mapToDepartmentEntity(dto1);
+        Department department = departmentMapper.mapToDepartmentEntity(dto);
+        Department department1 = departmentMapper.mapToDepartmentEntity(dto1);
 
         //than
         assertThat(department.getId()).isEqualTo(dto.getId());

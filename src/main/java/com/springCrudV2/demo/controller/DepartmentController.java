@@ -28,7 +28,7 @@ public class DepartmentController {
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<DepartmentDto>> getAll() {
         List<DepartmentDto> dtoList = departmentService.getAll();
-        return dtoList != null || !dtoList.isEmpty()
+        return dtoList != null
                 ? new ResponseEntity<>(dtoList, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -36,23 +36,30 @@ public class DepartmentController {
     @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DepartmentDto> getById(@PathVariable("id") @Min(1) @NotNull Long id) {
         DepartmentDto dto = departmentService.getDepartmentById(id);
-        return new ResponseEntity<>(dto, HttpStatus.OK);
+        return dto != null
+                ? new ResponseEntity<>(dto, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DepartmentDto> save(@Valid @NotNull @RequestBody DepartmentDto departmentDto) {
-        return new ResponseEntity<>(departmentService.save(departmentDto), HttpStatus.CREATED);
+        DepartmentDto saveDepartment = departmentService.save(departmentDto);
+        return new ResponseEntity<>(saveDepartment, HttpStatus.CREATED);
     }
 
     @PutMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DepartmentDto> update(@Valid @NotNull @RequestBody DepartmentDto departmentDto) {
-        departmentService.isExistById(departmentDto.getId());
-        return new ResponseEntity<>(departmentService.save(departmentDto), HttpStatus.OK);
+        DepartmentDto updateDepartment = departmentService.save(departmentDto);
+        return updateDepartment != null
+                ? new ResponseEntity<>(updateDepartment, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
     @DeleteMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DepartmentDto> deleteById(@PathVariable("id") @Min(1) @NotNull Long id) {
         departmentService.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return id != null
+                ? new ResponseEntity<>(HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }

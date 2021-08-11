@@ -6,8 +6,11 @@ import com.springCrudV2.demo.dto.DocumentDto;
 import com.springCrudV2.demo.dto.PersonDto;
 import com.springCrudV2.demo.entity.Language;
 import com.springCrudV2.demo.entity.Person;
-import com.springCrudV2.demo.exception.*;
-import com.springCrudV2.demo.mapperDto.PersonMapperDto;
+import com.springCrudV2.demo.exception.DepartmentNotFoundException;
+import com.springCrudV2.demo.exception.DocumentNotFoundException;
+import com.springCrudV2.demo.exception.LanguageNotFoundException;
+import com.springCrudV2.demo.exception.PersonNotFoundException;
+import com.springCrudV2.demo.mapper.PersonMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,29 +24,28 @@ public class PersonService {
     private final DocumentService documentService;
     private final DepartmentService departmentService;
     private final LanguageService languageService;
-    private final PersonMapperDto personMapperDto;
+    private final PersonMapper personMapper;
 
     @Autowired
     public PersonService(PersonRepository personRepository, DocumentService documentService,
-                         DepartmentService departmentService, LanguageService languageService, PersonMapperDto personMapperDto) {
+                         DepartmentService departmentService, LanguageService languageService, PersonMapper personMapper) {
         this.personRepository = personRepository;
         this.documentService = documentService;
         this.departmentService = departmentService;
         this.languageService = languageService;
-        this.personMapperDto = personMapperDto;
+        this.personMapper = personMapper;
     }
 
     public List<PersonDto> getAll() {
         List<Person> departmentList = personRepository.findAll();
         return departmentList.stream()
-                .map(personMapperDto::mapToPersonDto)
+                .map(personMapper::mapToPersonDto)
                 .collect(Collectors.toList());
     }
 
     public PersonDto getPersonById(Long id) {
-        isValidId(id);
         Person person = personRepository.findById(id).orElseThrow(() -> new PersonNotFoundException(id));
-        return personMapperDto.mapToPersonDto(person);
+        return personMapper.mapToPersonDto(person);
     }
 
     public PersonDto save(PersonDto dto) {
@@ -59,7 +61,7 @@ public class PersonService {
     }
 
     public Person fillFieldsPerson(PersonDto dto) {
-        Person person = personMapperDto.mapToPersonEntity(dto);
+        Person person = personMapper.mapToPersonEntity(dto);
 
         DocumentDto documentDto = documentService.getDocumentById(dto.getDocument());
         person.setDocument(documentService.getEntity(documentDto));
@@ -76,25 +78,14 @@ public class PersonService {
         return person;
     }
 
-    public boolean isValidId(Long id) {
-        if (id == null || id <= 1L || personRepository.existsById(id))
-            throw new DepartmentNotFoundException(id);
-        return true;
-    }
-
     public boolean isValidDto(PersonDto dto) {
-        if (!documentService.isExist(dto.getDocument()))
+        if (!documentService.isExistById(dto.getDocument()))
             throw new DocumentNotFoundException(dto.getDocument());
         if (!departmentService.isExistById(dto.getDepartment()))
             throw new DepartmentNotFoundException(dto.getDepartment());
         for (Long language : dto.getLanguages()) {
-            if (!languageService.isExist(languageService.getLanguageById(language)))
+            if (!languageService.isExistById(language))
                 throw new LanguageNotFoundException(language);
-        }
-        List<Person> list = personRepository.findAll();
-        for (Person person : list) {
-            if (person != null && person.getDocument().getId().equals(dto.getDocument()))
-                throw new DocumentAlreadyTakenException();
         }
         return true;
     }

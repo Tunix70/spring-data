@@ -27,30 +27,40 @@ public class PersonController {
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PersonDto>> getAll() {
         List<PersonDto> personList = personService.getAll();
-        return personList != null || !personList.isEmpty()
+        return personList != null
                 ? new ResponseEntity<>(personList, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PersonDto> getById(@PathVariable("id") @NotNull Long id) {
-        return new ResponseEntity<>(personService.getPersonById(id), HttpStatus.OK);
+        PersonDto person = personService.getPersonById(id);
+        return person != null
+                ? new ResponseEntity<>(person, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PersonDto> save(@Valid @RequestBody PersonDto personDto) {
-        return new ResponseEntity<>(personService.save(personDto), HttpStatus.CREATED);
+        PersonDto savePerson = personService.save(personDto);
+        return personDto != null
+                ? new ResponseEntity<>(savePerson, HttpStatus.CREATED)
+                : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PersonDto> update(@Valid @RequestBody PersonDto personDto) {
         PersonDto updatePerson = personService.save(personDto);
-        return new ResponseEntity<>(updatePerson, HttpStatus.OK);
+        return updatePerson != null
+                ? new ResponseEntity<>(updatePerson, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
     @DeleteMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Person> deleteById(@PathVariable("id") Long id) {
         personService.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return id != null
+                ? new ResponseEntity<>(HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }

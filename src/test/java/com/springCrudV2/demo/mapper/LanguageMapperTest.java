@@ -1,17 +1,14 @@
-package com.springCrudV2.demo.mapperDto;
+package com.springCrudV2.demo.mapper;
 
-import com.springCrudV2.demo.dto.DepartmentDto;
 import com.springCrudV2.demo.dto.LanguageDto;
-import com.springCrudV2.demo.entity.Department;
 import com.springCrudV2.demo.entity.Language;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
-class LanguageMapperDtoTest {
-    private LanguageMapperDto languageMapperDto = new LanguageMapperDto();
+class LanguageMapperTest {
+    private LanguageMapper languageMapper = new LanguageMapper();
 
     @Test
     @DisplayName("Method should map from entity to dto")
@@ -21,8 +18,8 @@ class LanguageMapperDtoTest {
         Language language1 = null;
 
         //when
-        LanguageDto dto = languageMapperDto.mapToLanguageDto(language);
-        LanguageDto dto1 = languageMapperDto.mapToLanguageDto(language1);
+        LanguageDto dto = languageMapper.mapToLanguageDto(language);
+        LanguageDto dto1 = languageMapper.mapToLanguageDto(language1);
 
         //than
         assertThat(dto.getId()).isEqualTo(language.getId());
@@ -39,8 +36,8 @@ class LanguageMapperDtoTest {
         LanguageDto dto1 = null;
 
         //when
-        Language language = languageMapperDto.mapToLanguageEntity(dto);
-        Language language1 = languageMapperDto.mapToLanguageEntity(dto1);
+        Language language = languageMapper.mapToLanguageEntity(dto);
+        Language language1 = languageMapper.mapToLanguageEntity(dto1);
 
         //than
         assertThat(language.getId()).isEqualTo(dto.getId());

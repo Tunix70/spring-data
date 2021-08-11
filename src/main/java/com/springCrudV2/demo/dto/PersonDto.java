@@ -46,6 +46,16 @@ public class PersonDto {
         this.birthday = birthday;
     }
 
+    public PersonDto(Long id, String first_name, String second_name, Date birthday, Long department, Set<Long> languages, String document) {
+        this.id = id;
+        this.first_name = first_name;
+        this.second_name = second_name;
+        this.birthday = birthday;
+        this.department = department;
+        this.languages = languages;
+        this.document = document;
+    }
+
     public Long getId() {
         return id;
     }

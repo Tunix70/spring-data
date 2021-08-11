@@ -27,7 +27,7 @@ public class LanguageController {
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Set<LanguageDto>> getAll() {
         Set<LanguageDto> languageList = languageService.getAll();
-        return languageList != null || !languageList.isEmpty()
+        return languageList != null
                 ? new ResponseEntity<>(languageList, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -35,23 +35,32 @@ public class LanguageController {
     @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<LanguageDto> getById(@PathVariable("id") @Min(1) @NotNull Long id) {
         LanguageDto language = languageService.getLanguageById(id);
-        return new ResponseEntity<>(language, HttpStatus.OK);
+        return language != null
+                ? new ResponseEntity<>(language, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<LanguageDto> save(@RequestBody LanguageDto dto) {
-        return new ResponseEntity<>(languageService.save(dto), HttpStatus.OK);
+        LanguageDto saveLanguage = languageService.save(dto);
+        return dto != null
+                ? new ResponseEntity<>(saveLanguage, HttpStatus.CREATED)
+                : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<LanguageDto> update(@RequestBody LanguageDto dto) {
-        languageService.isValidId(dto.getId());
-        return new ResponseEntity<>(languageService.save(dto), HttpStatus.OK);
+        languageService.save(dto);
+        return dto.getId() != null
+                ? new ResponseEntity<>(HttpStatus.NOT_MODIFIED)
+                : new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Language> deleteById(@PathVariable("id") @Min(1) @NotNull Long id) {
         languageService.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return id != null
+                ? new ResponseEntity<>(HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }

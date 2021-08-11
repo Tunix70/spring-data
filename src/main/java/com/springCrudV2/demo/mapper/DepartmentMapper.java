@@ -1,11 +1,11 @@
-package com.springCrudV2.demo.mapperDto;
+package com.springCrudV2.demo.mapper;
 
 import com.springCrudV2.demo.dto.DepartmentDto;
 import com.springCrudV2.demo.entity.Department;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DepartmentMapperDto {
+public class DepartmentMapper {
 
     public DepartmentDto mapToDepartmentDto(Department department) {
         DepartmentDto dto = new DepartmentDto();
