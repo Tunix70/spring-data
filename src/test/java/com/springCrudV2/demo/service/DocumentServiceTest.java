@@ -23,30 +23,23 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class DocumentServiceTest {
+    private final String ID1 = "wer-2124-gg";
+    private final String ID2 = "sdf-0022-as";
+    private final Date DATE1 = new Date(12335L);
+    private final Date DATE2 = new Date(54635L);
+    private final Document document = new Document(ID1, DATE1);;
+    private final Document document1 = new Document(ID2, DATE2);;
+    private final DocumentDto dto = new DocumentDto(ID1, DATE1);;
+    private final DocumentDto dto1 = new DocumentDto(ID2, DATE2);;
+
     @Mock
     private DocumentRepository documentRepository;
 
     @Mock
     private DocumentMapper documentMapper;
 
-    @Mock
-    private DocumentDtoValidator documentDtoValidator;
-
     @InjectMocks
     private DocumentService documentService;
-
-    private Document document;
-    private Document document1;
-    private DocumentDto dto;
-    private DocumentDto dto1;
-
-    @BeforeEach
-    void setUp() {
-        document = new Document("wer-123-fsd", new Date(12335L));
-        document1 = new Document("qwe-456-hff", new Date(909822L));
-        dto = new DocumentDto("wer-123-fsd", new Date(12335L));
-        dto1 = new DocumentDto("qwe-456-hff", new Date(909822L));
-    }
 
     @Test
     void shouldGetAllListDocument() {
@@ -55,19 +48,18 @@ class DocumentServiceTest {
         documentList.add(document);
         documentList.add(document1);
 
-        List<DocumentDto> dtotList = new ArrayList<>();
-        dtotList.add(dto);
-        dtotList.add(dto1);
+        List<DocumentDto> extectedList = new ArrayList<>();
+        extectedList.add(dto);
+        extectedList.add(dto1);
 
+        //when
         when(documentRepository.findAll()).thenReturn(documentList);
         when(documentMapper.mapToDocumentDto(document)).thenReturn(dto);
         when(documentMapper.mapToDocumentDto(document1)).thenReturn(dto1);
-
-        //when
         List<DocumentDto> resultList = documentService.getAll();
 
         //than
-        assertThat(dtotList).isEqualTo(resultList);
+        assertThat(extectedList).isEqualTo(resultList);
         verify(documentMapper, times(1)).mapToDocumentDto(document);
         verify(documentMapper, times(1)).mapToDocumentDto(document1);
         verify(documentRepository, times(1)).findAll();
@@ -75,24 +67,24 @@ class DocumentServiceTest {
 
     @Test
     void shouldGetDocumentByIdIfIdValid() {
-        when(documentRepository.findById("wer-123-fsd")).thenReturn(java.util.Optional.of(document));
-        when(documentMapper.mapToDocumentDto(document)).thenReturn(dto);
-
         //when
-        documentService.getDocumentById("wer-123-fsd");
+        when(documentRepository.findById(ID1)).thenReturn(java.util.Optional.of(document));
+        when(documentMapper.mapToDocumentDto(document)).thenReturn(dto);
+        DocumentDto result = documentService.getDocumentById(ID1);
 
         //than
-        verify(documentRepository, times(1)).findById("wer-123-fsd");
+        assertThat(result).isEqualTo(dto);
+        verify(documentRepository, times(1)).findById(ID1);
         verify(documentMapper, times(1)).mapToDocumentDto(document);
     }
 
     @Test
     void shouldThrowWhenGetDocumentByIdIfIdInvalid() {
         //when
-        when(documentRepository.findById("qwe-111")).thenThrow(new DocumentNotFoundException("qwe-111"));
+        when(documentRepository.findById(ID1)).thenReturn(java.util.Optional.empty());
 
         //than
-        assertThatThrownBy(() -> documentService.getDocumentById("qwe-111"))
+        assertThatThrownBy(() -> documentService.getDocumentById(ID1))
                 .isInstanceOf(DocumentNotFoundException.class);
         verify(documentMapper, times(0)).mapToDocumentEntity(any());
         verify(documentMapper, times(0)).mapToDocumentDto(any());
@@ -100,14 +92,13 @@ class DocumentServiceTest {
 
     @Test
     void shouldSaveDocumentAndReturnSaveDocument() {
-        //given
+        //when
         when(documentMapper.mapToDocumentEntity(dto)).thenReturn(document);
         when(documentRepository.save(document)).thenReturn(document);
-
-        //when
-        documentService.save(dto);
+        DocumentDto result = documentService.save(dto);
 
         //than
+        assertThat(result).isEqualTo(dto);
         verify(documentRepository, times(1)).save(document);
         verify(documentMapper, times(1)).mapToDocumentEntity(dto);
         verify(documentMapper, times(0)).mapToDocumentDto(any());
@@ -115,51 +106,32 @@ class DocumentServiceTest {
 
     @Test
     void shouldRemoveDocumentByIdIfItExistInDataBase() {
-        when(documentRepository.existsById("123-eqw-33")).thenReturn(true);
-        doNothing().when(documentRepository).deleteById("123-eqw-33");
-
         //when
-        documentService.deleteByNumber("123-eqw-33");
+        when(documentRepository.existsById(ID1)).thenReturn(true);
+        documentService.deleteByNumber(ID1);
 
         //than
         verify(documentRepository, times(1)).existsById(any());
-        verify(documentRepository, times(1)).deleteById("123-eqw-33");
+        verify(documentRepository, times(1)).deleteById(ID1);
     }
 
     @Test
     void shouldFailWhenRemoveDepartmentByIdIfItNotExistInDataBase() {
         //when
-        when(documentRepository.existsById("876-asd")).thenReturn(false);
+        when(documentRepository.existsById(ID1)).thenReturn(false);
 
         //than
-        assertThatThrownBy(() -> documentService.deleteByNumber("876-asd"))
+        assertThatThrownBy(() -> documentService.deleteByNumber(ID1))
                 .isInstanceOf(DocumentNotFoundException.class);
     }
-
-    @Test
-    void validate() {
-//        //given
-//        DataBinder dataBinder = new DataBinder(dto);
-//        dataBinder.addValidators(documentDtoValidator);
-//        dataBinder.validate();
-//
-//        assertTrue(dataBinder.getBindingResult().hasErrors());
-//
-//        if(dataBinder.getBindingResult().hasErrors()) {
-//            dataBinder.getBindingResult().getAllErrors().
-//                    forEach(e -> System.out.println(messageSource
-//                            .getMessage(e, Locale.getDefault())));
-//        }
-    }
-
 
     @Test
     void shouldReturnTrueIfDocumentIsExistById() {
         //when
         when(documentRepository.existsById(any())).thenReturn(true);
-        documentService.isExistById(any());
+        documentService.isExistById(ID1);
 
         //than
-        verify(documentRepository, times(1)).existsById(any());
+        verify(documentRepository, times(1)).existsById(ID1);
     }
 }

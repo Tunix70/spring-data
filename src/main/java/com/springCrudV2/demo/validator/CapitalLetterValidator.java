@@ -8,6 +8,7 @@ import javax.validation.ConstraintValidatorContext;
 
 @Component("beforeCreateCapitalLetterValidator")
 public class CapitalLetterValidator implements ConstraintValidator<StartWithCapitalLetter, String> {
+
     @Override
     public void initialize(StartWithCapitalLetter constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);

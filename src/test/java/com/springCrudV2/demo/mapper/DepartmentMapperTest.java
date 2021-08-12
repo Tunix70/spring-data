@@ -9,40 +9,62 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class DepartmentMapperTest {
     private DepartmentMapper departmentMapper = new DepartmentMapper();
+    private static Long ID = 43L;
+    private static String NAME = "Department";
+
 
     @Test
-    @DisplayName("Method should map from entity to dto")
+    @DisplayName("Method should map from Department entity to Department dto")
     void shouldMapToDtoFromEntity() {
        //given
-        Department department = new Department(43L, "Department");
-        Department department1 = null;
+        Department department = new Department(ID, NAME);
+        DepartmentDto expected = new DepartmentDto(ID, NAME);
 
         //when
-        DepartmentDto dto = departmentMapper.mapToDepartmentDto(department);
-        DepartmentDto dto1 = departmentMapper.mapToDepartmentDto(department1);
+        DepartmentDto result = departmentMapper.mapToDepartmentDto(department);
 
         //than
-        assertThat(dto.getId()).isEqualTo(department.getId());
-        assertThat(dto.getName()).isEqualTo(department.getName());
-
-        assertThat(dto1).isNull();
+        assertThat(result).isEqualTo(expected);
     }
 
     @Test
-    @DisplayName("Method should map from dto to entity")
+    @DisplayName("Method should map from Department entity to Department dto and return null")
+    void shouldGetNullWhenMapToDtoFromEntityWhereEntityIsNull() {
+        //given
+        Department department = null;
+
+        //when
+        DepartmentDto result = departmentMapper.mapToDepartmentDto(department);
+
+        //than
+        assertThat(result).isNull();
+    }
+
+    @Test
+    @DisplayName("Method should map from Department dto to Department entity")
     void shouldMapToEntityFromDto() {
         //given
-        DepartmentDto dto = new DepartmentDto(54L, "Department DTO");
-        DepartmentDto dto1 = null;
+        DepartmentDto dto = new DepartmentDto(ID, NAME);
+        Department expected = new Department(ID, NAME);
 
         //when
         Department department = departmentMapper.mapToDepartmentEntity(dto);
-        Department department1 = departmentMapper.mapToDepartmentEntity(dto1);
 
         //than
-        assertThat(department.getId()).isEqualTo(dto.getId());
-        assertThat(department.getName()).isEqualTo(dto.getName());
+        assertThat(department).isEqualTo(expected);
 
-        assertThat(department1).isNull();
+    }
+
+    @Test
+    @DisplayName("Method should map from Department dto to Department entity")
+    void shouldReturnNullWhenMapToEntityFromDtoWhereDtoIsNull() {
+        //given
+        DepartmentDto dto = null;
+
+        //when
+        Department department = departmentMapper.mapToDepartmentEntity(dto);
+
+        //than
+        assertThat(department).isNull();
     }
 }

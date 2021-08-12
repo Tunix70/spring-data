@@ -7,6 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.sql.Date;
+import java.util.Objects;
 import java.util.Set;
 
 public class PersonDto {
@@ -110,5 +111,21 @@ public class PersonDto {
 
     public void setDocument(String document) {
         this.document = document;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PersonDto personDto = (PersonDto) o;
+        return Objects.equals(id, personDto.id) && Objects.equals(first_name, personDto.first_name)
+                && Objects.equals(second_name, personDto.second_name) && Objects.equals(birthday, personDto.birthday)
+                && Objects.equals(department, personDto.department) && Objects.equals(languages, personDto.languages)
+                && Objects.equals(document, personDto.document);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, first_name, second_name, birthday, department, languages, document);
     }
 }

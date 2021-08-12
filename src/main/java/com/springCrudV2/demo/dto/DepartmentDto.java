@@ -4,6 +4,7 @@ import com.springCrudV2.demo.annotation.StartWithCapitalLetter;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
+import java.util.Objects;
 
 public class DepartmentDto {
 
@@ -36,5 +37,19 @@ public class DepartmentDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DepartmentDto that = (DepartmentDto) o;
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
     }
 }

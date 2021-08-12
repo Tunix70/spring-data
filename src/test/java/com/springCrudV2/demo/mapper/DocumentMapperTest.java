@@ -11,41 +11,57 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class DocumentMapperTest {
     private DocumentMapper documentMapper = new DocumentMapper();
-    private Date date = new Date(45654625L);
+    private final Date DATE = new Date(45654625L);
+    private final String NAME = "yer-345-tuu";
 
     @Test
-    @DisplayName("Method should convert from entity to dto")
     void shouldMapToDtoFromEntity() {
         //given
-        Document document = new Document("yer-345-tuu", date);
-        Document document1 = null;
+        Document document = new Document(NAME, DATE);
+        DocumentDto expected = new DocumentDto(NAME, DATE);
 
         //when
-        DocumentDto dto = documentMapper.mapToDocumentDto(document);
-        DocumentDto dto1 = documentMapper.mapToDocumentDto(document1);
+        DocumentDto result = documentMapper.mapToDocumentDto(document);
 
         //than
-        assertThat(dto.getId()).isEqualTo(document.getId());
-        assertThat(dto.getExpiry_date()).isEqualTo(document.getExpiry_date());
+        assertThat(result).isEqualTo(expected);
 
-        assertThat(dto1).isNull();
     }
 
     @Test
-    @DisplayName("Method should convert from dto to entity")
-    void shouldMapToEntityFromDto() {
+    void shouldReturnNullWhenMapToDtoFromEntityIfDocumentIsNull() {
         //given
-        DocumentDto dto = new DocumentDto("wer-123-iro", date);
-        DocumentDto dto1 = null;
+        Document document = null;
 
         //when
-        Document document = documentMapper.mapToDocumentEntity(dto);
-        Document document1 = documentMapper.mapToDocumentEntity(dto1);
+        DocumentDto result = documentMapper.mapToDocumentDto(document);
 
         //than
-        assertThat(document.getId()).isEqualTo(dto.getId());
-        assertThat(document.getExpiry_date()).isEqualTo(dto.getExpiry_date());
+        assertThat(result).isNull();
+    }
 
-        assertThat(document1).isNull();
+    @Test
+    void shouldMapToEntityFromDto() {
+        //given
+        DocumentDto dto = new DocumentDto(NAME, DATE);
+        Document expected = new Document(NAME, DATE);
+
+        //when
+        Document result = documentMapper.mapToDocumentEntity(dto);
+
+        //than
+        assertThat(result).isEqualTo(expected);
+    }
+
+    @Test
+    void shouldReturnNullWhenMapToEntityFromDtoIfDocumentIsNull() {
+        //given
+        DocumentDto dto = null;
+
+        //when
+        Document result = documentMapper.mapToDocumentEntity(dto);
+
+        //than
+        assertThat(result).isNull();
     }
 }

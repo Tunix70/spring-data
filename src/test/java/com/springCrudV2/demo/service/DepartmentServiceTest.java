@@ -20,6 +20,11 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class DepartmentServiceTest {
+    private final Long ID1 = 1L;
+    private final Long ID2 = 2L;
+    private final String NAME1 = "Department";
+    private final String NAME2 = "New Department";
+
     @Mock
     private DepartmentRepository departmentRepository;
 
@@ -33,29 +38,27 @@ class DepartmentServiceTest {
     void shouldGetAllListDepartment() {
         //given
         List<Department> departmentList = new ArrayList<>();
-        Department department = new Department(1L, "Department");
-        Department department1 = new Department(2L, "Main Department");
-
+        Department department = new Department(ID1, NAME1);
+        Department department1 = new Department(ID2, NAME2);
         departmentList.add(department);
         departmentList.add(department1);
 
         List<DepartmentDto> dtotList = new ArrayList<>();
-        DepartmentDto dto = new DepartmentDto(1L, "Department");
-        DepartmentDto dto1 = new DepartmentDto(2L, "Main Department");
-
+        DepartmentDto dto = new DepartmentDto(ID1, NAME1);
+        DepartmentDto dto1 = new DepartmentDto(ID2, NAME2);
         dtotList.add(dto);
         dtotList.add(dto1);
 
+        //when
         when(departmentRepository.findAll()).thenReturn(departmentList);
         when(departmentMapper.mapToDepartmentDto(department)).thenReturn(dto);
         when(departmentMapper.mapToDepartmentDto(department1)).thenReturn(dto1);
-
-        //when
-        List<DepartmentDto> departmentList1 = departmentService.getAll();
+        List<DepartmentDto> result = departmentService.getAll();
 
         //than
-        assertThat(dtotList).isEqualTo(departmentList1);
+        assertThat(dtotList).isEqualTo(result);
         verify(departmentMapper, times(1)).mapToDepartmentDto(department);
+        verify(departmentMapper, times(0)).mapToDepartmentEntity(any());
         verify(departmentMapper, times(1)).mapToDepartmentDto(department1);
         verify(departmentRepository, times(1)).findAll();
     }
@@ -63,27 +66,28 @@ class DepartmentServiceTest {
     @Test
     void shouldGetDepartmentByIdIfIdValid() {
         //given
-        Department department = new Department(1L, "Department");
-        DepartmentDto dto = new DepartmentDto(1L, "Department");
-
-        when(departmentRepository.findById(1L)).thenReturn(java.util.Optional.of(department));
-        when(departmentMapper.mapToDepartmentDto(department)).thenReturn(dto);
+        Department department = new Department(ID1, NAME1);
+        DepartmentDto expected = new DepartmentDto(ID1, NAME1);
 
         //when
-        departmentService.getDepartmentById(1L);
+        when(departmentRepository.findById(ID1)).thenReturn(java.util.Optional.of(department));
+        when(departmentMapper.mapToDepartmentDto(department)).thenReturn(expected);
+        DepartmentDto result = departmentService.getDepartmentById(ID1);
 
         //than
-        verify(departmentRepository, times(1)).findById(1L);
+        assertThat(result).isEqualTo(expected);
+        verify(departmentRepository, times(1)).findById(ID1);
         verify(departmentMapper, times(1)).mapToDepartmentDto(department);
+        verify(departmentMapper, times(0)).mapToDepartmentEntity(any());
     }
 
     @Test
     void shouldThrowWhenGetDepartmentByIdIfIdInvalid() {
         //when
-        when(departmentRepository.findById(1L)).thenThrow(new DepartmentNotFoundException(1L));
+        when(departmentRepository.findById(ID1)).thenReturn(java.util.Optional.empty());
 
         //than
-        assertThatThrownBy(() -> departmentService.getDepartmentById(1L))
+        assertThatThrownBy(() -> departmentService.getDepartmentById(ID1))
                 .isInstanceOf(DepartmentNotFoundException.class);
         verify(departmentMapper, times(0)).mapToDepartmentDto(any());
         verify(departmentMapper, times(0)).mapToDepartmentEntity(any());
@@ -92,40 +96,39 @@ class DepartmentServiceTest {
     @Test
     void shouldSaveDepartmentAndReturnSaveDepartment() {
         //given
-        Department department = new Department(null, "Main Department");
-        DepartmentDto dto = new DepartmentDto(null, "Main Department");
-
-        when(departmentMapper.mapToDepartmentEntity(dto)).thenReturn(department);
-        when(departmentRepository.save(department)).thenReturn(department);
+        Department department = new Department(null, NAME1);
+        DepartmentDto expected = new DepartmentDto(null, NAME1);
 
         //when
-        departmentService.save(dto);
+        when(departmentMapper.mapToDepartmentEntity(expected)).thenReturn(department);
+        when(departmentRepository.save(department)).thenReturn(department);
+        DepartmentDto result = departmentService.save(expected);
 
         //than
+        assertThat(result).isEqualTo(expected);
         verify(departmentRepository, times(1)).save(department);
-        verify(departmentMapper, times(1)).mapToDepartmentEntity(dto);
+        verify(departmentMapper, times(1)).mapToDepartmentEntity(expected);
         verify(departmentMapper, times(0)).mapToDepartmentDto(any());
     }
 
     @Test
     void shouldRemoveDepartmentByIdIfItExistInDataBase() {
         //when
-        when(departmentRepository.existsById(1L)).thenReturn(true);
-        doNothing().when(departmentRepository).deleteById(1L);
-        departmentService.deleteById(1L);
+        when(departmentRepository.existsById(ID1)).thenReturn(true);
+        departmentService.deleteById(ID1);
 
         //than
         verify(departmentRepository, times(1)).existsById(any());
-        verify(departmentRepository, times(1)).deleteById(1L);
+        verify(departmentRepository, times(1)).deleteById(ID1);
     }
 
     @Test
     void shouldFailWhenRemoveDepartmentByIdIfItNotExistInDataBase() {
         //when
-        when(departmentRepository.existsById(1L)).thenReturn(false);
+        when(departmentRepository.existsById(ID1)).thenReturn(false);
 
         //than
-        assertThatThrownBy(() -> departmentService.deleteById(1L))
+        assertThatThrownBy(() -> departmentService.deleteById(ID1))
                 .isInstanceOf(DepartmentNotFoundException.class);
     }
 
@@ -133,7 +136,7 @@ class DepartmentServiceTest {
     void shouldReturnTrueIfDepartmentIsExistById() {
         //when
         when(departmentRepository.existsById(any())).thenReturn(true);
-        departmentService.isExistById(1L);
+        departmentService.isExistById(ID1);
 
         //than
         verify(departmentRepository, times(1)).existsById(any());

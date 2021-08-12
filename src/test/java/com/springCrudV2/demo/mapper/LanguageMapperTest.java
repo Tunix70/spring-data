@@ -9,40 +9,56 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class LanguageMapperTest {
     private LanguageMapper languageMapper = new LanguageMapper();
+    private final Long ID = 43L;
+    private final String NAME = "RU";
 
     @Test
-    @DisplayName("Method should map from entity to dto")
     void shouldMapToDtoFromEntity() {
         //given
-        Language language = new Language(43L, "RU");
-        Language language1 = null;
+        Language language = new Language(ID, NAME);
+        LanguageDto expected = new LanguageDto(ID, NAME);
 
         //when
-        LanguageDto dto = languageMapper.mapToLanguageDto(language);
-        LanguageDto dto1 = languageMapper.mapToLanguageDto(language1);
+        LanguageDto result = languageMapper.mapToLanguageDto(language);
 
         //than
-        assertThat(dto.getId()).isEqualTo(language.getId());
-        assertThat(dto.getName()).isEqualTo(language.getName());
-
-        assertThat(dto1).isNull();
+        assertThat(result).isEqualTo(expected);
     }
 
     @Test
-    @DisplayName("Method should map from dto to entity")
-    void shouldMapToEntityFromDto() {
+    void shouldGetNullWhenMapToDtoFromEntityWhereEntityIsNull() {
         //given
-        LanguageDto dto = new LanguageDto(54L, "RU");
-        LanguageDto dto1 = null;
+        Language language = null;
 
         //when
-        Language language = languageMapper.mapToLanguageEntity(dto);
-        Language language1 = languageMapper.mapToLanguageEntity(dto1);
+        LanguageDto result = languageMapper.mapToLanguageDto(language);
 
         //than
-        assertThat(language.getId()).isEqualTo(dto.getId());
-        assertThat(language.getName()).isEqualTo(dto.getName());
+        assertThat(result).isNull();
+    }
 
-        assertThat(language1).isNull();
+    @Test
+    void shouldMapToEntityFromDto() {
+        //given
+        LanguageDto dto = new LanguageDto(ID, NAME);
+        Language expected = new Language(ID, NAME);
+
+        //when
+        Language result = languageMapper.mapToLanguageEntity(dto);
+
+        //than
+        assertThat(result).isEqualTo(expected);
+    }
+
+    @Test
+    void shouldReturnNullWhenMapToEntityFromDtoWhereDtoIsNull() {
+        //given
+        LanguageDto dto = null;
+
+        //when
+        Language result = languageMapper.mapToLanguageEntity(dto);
+
+        //than
+        assertThat(result).isNull();
     }
 }

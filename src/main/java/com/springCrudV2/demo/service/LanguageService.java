@@ -68,7 +68,7 @@ public class LanguageService {
     }
 
     public boolean isValid(LanguageDto dto) {
-        final DataBinder dataBinder = new DataBinder(dto);
+        DataBinder dataBinder = new DataBinder(dto);
         dataBinder.addValidators(languageDtoValidator);
         dataBinder.validate(dto);
         if (dataBinder.getBindingResult().hasErrors()) {
@@ -86,6 +86,5 @@ public class LanguageService {
         }
         return true;
     }
-
 
 }

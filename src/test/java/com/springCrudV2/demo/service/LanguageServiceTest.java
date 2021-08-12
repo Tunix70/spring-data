@@ -3,14 +3,18 @@ package com.springCrudV2.demo.service;
 import com.springCrudV2.demo.dao.LanguageRepository;
 import com.springCrudV2.demo.dto.LanguageDto;
 import com.springCrudV2.demo.entity.Language;
+import com.springCrudV2.demo.exception.LanguageNameNotValidException;
 import com.springCrudV2.demo.exception.LanguageNotFoundException;
 import com.springCrudV2.demo.mapper.LanguageMapper;
+import com.springCrudV2.demo.validator.LanguageDtoValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.DataBinder;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -23,6 +27,14 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class LanguageServiceTest {
+    private final Long ID = 1L;
+    private final Language language = new Language(1L, "RU");
+    private final Language language1 = new Language(2L,"EU");
+    private final Language language2 = new Language(3L, "IT");
+    private final LanguageDto dto = new LanguageDto(1L, "RU");
+    private final LanguageDto dto1 = new LanguageDto(2L,"EU");
+    private final LanguageDto dto2 = new LanguageDto(3L, "IT");
+
     @Mock
     private LanguageRepository languageRepository;
 
@@ -32,23 +44,6 @@ class LanguageServiceTest {
     @InjectMocks
     private LanguageService languageService;
 
-    private Language language;
-    private Language language1;
-    private Language language2;
-    private LanguageDto dto;
-    private LanguageDto dto1;
-    private LanguageDto dto2;
-
-    @BeforeEach
-    void setUp() {
-        language = new Language(1L, "RU");
-        language1 = new Language(2L,"EU");
-        language2 = new Language(3L, "IT");
-        dto = new LanguageDto(1L, "RU");
-        dto1 = new LanguageDto(2L,"EU");
-        dto2 = new LanguageDto(3L, "IT");
-    }
-
     @Test
     void shouldGetAllListLanguage() {
         //given
@@ -57,21 +52,20 @@ class LanguageServiceTest {
         languageList.add(language1);
         languageList.add(language2);
 
-        Set<LanguageDto> dtotList = new HashSet<>();
-        dtotList.add(dto);
-        dtotList.add(dto1);
-        dtotList.add(dto2);
+        Set<LanguageDto> expectedList = new HashSet<>();
+        expectedList.add(dto);
+        expectedList.add(dto1);
+        expectedList.add(dto2);
 
+        //when
         when(languageRepository.findAll()).thenReturn(languageList);
         when(languageMapper.mapToLanguageDto(language)).thenReturn(dto);
         when(languageMapper.mapToLanguageDto(language1)).thenReturn(dto1);
         when(languageMapper.mapToLanguageDto(language2)).thenReturn(dto2);
-
-        //when
         Set<LanguageDto> resultList = languageService.getAll();
 
         //than
-        assertThat(resultList).isEqualTo(dtotList);
+        assertThat(resultList).isEqualTo(expectedList);
         verify(languageMapper, times(0)).mapToLanguageEntity(any());
         verify(languageMapper, times(3)).mapToLanguageDto(any());
         verify(languageRepository, times(1)).findAll();
@@ -79,15 +73,14 @@ class LanguageServiceTest {
 
     @Test
     void shouldGetLanguageByIdIfIdValid() {
-        //given
-        when(languageRepository.findById(1L)).thenReturn(java.util.Optional.of(language));
-        when(languageMapper.mapToLanguageDto(language)).thenReturn(dto);
-
         //when
-        languageService.getLanguageById(1L);
+        when(languageRepository.findById(ID)).thenReturn(java.util.Optional.of(language));
+        when(languageMapper.mapToLanguageDto(language)).thenReturn(dto);
+        LanguageDto result = languageService.getLanguageById(ID);
 
         //than
-        verify(languageRepository, times(1)).findById(1L);
+        assertThat(result).isEqualTo(dto);
+        verify(languageRepository, times(1)).findById(ID);
         verify(languageMapper, times(1)).mapToLanguageDto(language);
         verify(languageMapper, times(0)).mapToLanguageEntity(any());
     }
@@ -95,10 +88,10 @@ class LanguageServiceTest {
     @Test
     void shouldThrowWhenGetLanguageByIdIfIdInvalid() {
         //when
-        when(languageRepository.findById(1L)).thenThrow(new LanguageNotFoundException(1L));
+        when(languageRepository.findById(ID)).thenReturn(java.util.Optional.empty());
 
         //than
-        assertThatThrownBy(() -> languageService.getLanguageById(1L))
+        assertThatThrownBy(() -> languageService.getLanguageById(ID))
                 .isInstanceOf(LanguageNotFoundException.class);
         verify(languageMapper, times(0)).mapToLanguageEntity(any());
         verify(languageMapper, times(0)).mapToLanguageDto(any());
@@ -106,14 +99,13 @@ class LanguageServiceTest {
 
     @Test
     void shouldSaveLanguageAndReturnSaveLanguage() {
-        //given
+        //when
         when(languageMapper.mapToLanguageEntity(dto)).thenReturn(language);
         when(languageRepository.save(language)).thenReturn(language);
-
-        //when
-        languageService.save(dto);
+        LanguageDto result = languageService.save(dto);
 
         //than
+        assertThat(result).isEqualTo(dto);
         verify(languageRepository, times(1)).save(language);
         verify(languageMapper, times(1)).mapToLanguageEntity(dto);
         verify(languageMapper, times(0)).mapToLanguageDto(any());
@@ -122,35 +114,30 @@ class LanguageServiceTest {
     @Test
     void shouldRemoveLanguageByIdIfItExistInDataBase() {
         //when
-        when(languageRepository.existsById(1L)).thenReturn(true);
-        doNothing().when(languageRepository).deleteById(1L);
-        languageService.deleteById(1L);
+        when(languageRepository.existsById(ID)).thenReturn(true);
+        languageService.deleteById(ID);
 
         //than
         verify(languageRepository, times(1)).existsById(any());
-        verify(languageRepository, times(1)).deleteById(1L);
+        verify(languageRepository, times(1)).deleteById(ID);
     }
 
     @Test
     void shouldFailWhenRemoveLanguageByIdIfItNotExistInDataBase() {
         //when
-        when(languageRepository.existsById(1L)).thenReturn(false);
+        when(languageRepository.existsById(ID)).thenReturn(false);
 
         //than
-        assertThatThrownBy(() -> languageService.deleteById(1L))
+        assertThatThrownBy(() -> languageService.deleteById(ID))
                 .isInstanceOf(LanguageNotFoundException.class);
     }
 
-    @Test
-    void isValid() {
-
-    }
 
     @Test
     void isExist() {
         //when
         when(languageRepository.existsById(any())).thenReturn(true);
-        languageService.isExistById(1L);
+        languageService.isExistById(ID);
 
         //than
         verify(languageRepository, times(1)).existsById(any());
