@@ -3,7 +3,6 @@ package com.springCrudV2.demo.service;
 import com.springCrudV2.demo.dao.PersonRepository;
 import com.springCrudV2.demo.dto.DepartmentDto;
 import com.springCrudV2.demo.dto.DocumentDto;
-import com.springCrudV2.demo.dto.LanguageDto;
 import com.springCrudV2.demo.dto.PersonDto;
 import com.springCrudV2.demo.entity.Department;
 import com.springCrudV2.demo.entity.Document;
@@ -14,7 +13,6 @@ import com.springCrudV2.demo.exception.DocumentNotFoundException;
 import com.springCrudV2.demo.exception.LanguageNotFoundException;
 import com.springCrudV2.demo.exception.PersonNotFoundException;
 import com.springCrudV2.demo.mapper.PersonMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -34,89 +32,46 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class PersonServiceTest {
+    private final Long ID = 1L;
     @Mock
     private PersonRepository personRepository;
-
     @Mock
     private PersonMapper personMapper;
-
     @Mock
     private DocumentService documentService;
-
     @Mock
     private DepartmentService departmentService;
-
     @Mock
     private LanguageService languageService;
 
     @InjectMocks
     private PersonService personService;
 
-
-    private Person person;
-    private Person person1;
-    private PersonDto personDto;
-    private PersonDto personDto1;
-    private Set<Language> languageSet = new HashSet<>();
-    private Set<Language> languageSet1 = new HashSet<>();
-    private Set<Long> languageSetDto = new HashSet<>();
-    private Set<Long> languageSetDto1 = new HashSet<>();
-    private Set<LanguageDto> dtoSet;
-    private Department department;
-    private Department department1;
-    private DepartmentDto departmentDto;
-    private Document document;
-    private Document document1;
-    private DocumentDto documentDto;
-
-    @BeforeEach
-    void setUp() {
-        department = new Department(1L, "Department");
-        department1 = new Department(2L, "Main Department");
-
-        document = new Document("wer-123-fsd", new Date(12335L));
-        document1 = new Document("sdf-423-qqq", new Date(12443L));
-
-        Language language = new Language(1L, "RU");
-        Language language1 = new Language(2L,"EU");
-        Language language2 = new Language(2L,"IT");
-
-        languageSet.add(language);
-        languageSet.add(language1);
-        languageSet1.add(language1);
-        languageSet1.add(language2);
-
-        languageSetDto.add(language.getId());
-        languageSetDto.add(language1.getId());
-        languageSetDto1.add(language1.getId());
-        languageSetDto1.add(language2.getId());
-
-        person = new Person(1L, "Pavel", "Morozov", new Date(1234L), department, languageSet, document);
-        person1 = new Person(2L, "Oleg", "Grinkov", new Date(1323L), department1, languageSet1, document1);
-        personDto = new PersonDto(1L, "Pavel", "Morozov", new Date(1234L), department.getId(), languageSetDto, document.getId());
-        personDto1 = new PersonDto(2L, "Oleg", "Grinkov", new Date(1323L), department1.getId(), languageSetDto1, document1.getId());
-    }
-
     @Test
     void shouldGetAllListPerson() {
         //given
-        List<Person> listPerson = new ArrayList<>();
-        listPerson.add(person);
-        listPerson.add(person1);
+        List<Person> personList = new ArrayList<>();
+        Person person = getPersonFirst();
+        Person person1 = getPersonSecond();
 
-        List<PersonDto> listDtoPerson = new ArrayList<>();
-        listDtoPerson.add(personDto);
-        listDtoPerson.add(personDto1);
+        personList.add(person);
+        personList.add(person1);
 
-        when(personRepository.findAll()).thenReturn(listPerson);
-        when(personMapper.mapToPersonDto(person)).thenReturn(personDto);
-        when(personMapper.mapToPersonDto(person1)).thenReturn(personDto1);
+        List<PersonDto> expectList = new ArrayList<>();
+        PersonDto personDto = getPersonDtoFirst();
+        PersonDto personDto1 = getPersonDtoSecond();
+
+        expectList.add(personDto);
+        expectList.add(personDto1);
 
         //when
+        when(personRepository.findAll()).thenReturn(personList);
+        when(personMapper.mapToPersonDto(person)).thenReturn(personDto);
+        when(personMapper.mapToPersonDto(person1)).thenReturn(personDto1);
         List<PersonDto> resultList = personService.getAll();
 
         //than
-        assertThat(resultList).isEqualTo(listDtoPerson);
+        assertThat(resultList).isEqualTo(expectList);
         verify(personMapper, times(0)).mapToPersonEntity(any());
         verify(personMapper, times(2)).mapToPersonDto(any());
         verify(personRepository, times(1)).findAll();
@@ -125,24 +80,28 @@ class PersonServiceTest {
     @Test
     void shouldGetPeronByIdIfIdValid() {
         //given
-        when(personRepository.findById(1L)).thenReturn(java.util.Optional.of(person));
-        when(personMapper.mapToPersonDto(person)).thenReturn(personDto);
+        Person person = getPersonFirst();
+        PersonDto expected = getPersonDtoFirst();
 
         //when
-        personService.getPersonById(1L);
+        when(personRepository.findById(ID)).thenReturn(java.util.Optional.of(person));
+        when(personMapper.mapToPersonDto(person)).thenReturn(expected);
+        PersonDto result = personService.getPersonById(ID);
 
         //than
-        verify(personRepository, times(1)).findById(1L);
+        assertThat(result).isEqualTo(expected);
+        verify(personRepository, times(1)).findById(ID);
         verify(personMapper, times(1)).mapToPersonDto(person);
+        verify(personMapper, times(0)).mapToPersonEntity(any());
     }
 
     @Test
     void shouldThrowWhenGetPersonByIdIfIdInvalid() {
         //when
-        when(personRepository.findById(1L)).thenThrow(new PersonNotFoundException(1L));
+        when(personRepository.findById(ID)).thenThrow(new PersonNotFoundException(ID));
 
         //than
-        assertThatThrownBy(() -> personService.getPersonById(1L))
+        assertThatThrownBy(() -> personService.getPersonById(ID))
                 .isInstanceOf(PersonNotFoundException.class);
         verify(personMapper, times(0)).mapToPersonDto(any());
         verify(personMapper, times(0)).mapToPersonEntity(any());
@@ -151,18 +110,21 @@ class PersonServiceTest {
     @Test
     void shouldSavePersonAndReturnSavePerson() {
         //given
-        when(personMapper.mapToPersonEntity(personDto)).thenReturn(person);
+        Person person = getPersonFirst();
+        PersonDto expected = getPersonDtoFirst();
+
+        //when
+        when(personMapper.mapToPersonEntity(expected)).thenReturn(person);
         when(personRepository.save(person)).thenReturn(person);
         when(documentService.isExistById(any())).thenReturn(true);
         when(languageService.isExistById(any())).thenReturn(true);
         when(departmentService.isExistById(any())).thenReturn(true);
-
-        //when
-        personService.save(personDto);
+        PersonDto result = personService.save(expected);
 
         //than
+        assertThat(result).isEqualTo(expected);
         verify(personRepository, times(1)).save(person);
-        verify(personMapper, times(1)).mapToPersonEntity(personDto);
+        verify(personMapper, times(1)).mapToPersonEntity(expected);
         verify(personMapper, times(0)).mapToPersonDto(any());
         verify(documentService, times(1)).isExistById(any());
         verify(languageService, times(2)).isExistById(any());
@@ -172,15 +134,24 @@ class PersonServiceTest {
     @Test
     void shouldRemovePersonByIdIfItExistInDataBase() {
         //when
-        doNothing().when(personRepository).deleteById(1L);
-        personService.deleteById(1L);
+        personService.deleteById(ID);
 
         //than
-        verify(personRepository, times(1)).deleteById(1L);
+        verify(personRepository, times(1)).deleteById(ID);
     }
 
     @Test
     void shouldFillAllFieldsToPersonFromDtoAndRetutnPerson() {
+        //given
+        Department department = getDepartment();
+        DepartmentDto departmentDto = getDepartmentDto();
+
+        Document document = getDocument();
+        DocumentDto documentDto = getDocumentDto();
+
+        PersonDto personDto = getPersonDtoFirst();
+        Person person = getPersonFirst();
+
         //when
         when(personMapper.mapToPersonEntity(personDto)).thenReturn(person);
         when(documentService.getDocumentById(personDto.getDocument())).thenReturn(documentDto);
@@ -188,10 +159,10 @@ class PersonServiceTest {
         when(departmentService.getDepartmentById(personDto.getDepartment())).thenReturn(departmentDto);
         when(departmentService.getEntity(departmentDto)).thenReturn(department);
 
-
-        Person person = personService.fillFieldsPerson(personDto);
+        Person result = personService.fillFieldsPerson(personDto);
 
         //than
+        assertThat(result).isEqualTo(person);
         assertThat(person.getId()).isEqualTo(personDto.getId());
         assertThat(person.getFirst_name()).isEqualTo(personDto.getFirst_name());
         assertThat(person.getSecond_name()).isEqualTo(personDto.getSecond_name());
@@ -207,11 +178,13 @@ class PersonServiceTest {
         verify(departmentService, times(2)).getEntity(departmentDto);
         verify(languageService,times(2)).getLanguageById(any());
         verify(languageService,times(2)).getEntity(any());
-
     }
 
     @Test
     void shouldTrueIfAllDtoInPersonIsValid() {
+        //given
+        PersonDto personDto = getPersonDtoFirst();
+
         //when
         when(documentService.isExistById(any())).thenReturn(true);
         when(languageService.isExistById(any())).thenReturn(true);
@@ -228,6 +201,9 @@ class PersonServiceTest {
 
     @Test
     void shouldThrowExceptionIfDocumentInPersonIsInvalid() {
+        //given
+        PersonDto personDto = getPersonDtoFirst();
+
         //when
         when(documentService.isExistById(any())).thenReturn(false);
 
@@ -241,6 +217,9 @@ class PersonServiceTest {
 
     @Test
     void shouldThrowExceptionIfDepartmentInPersonIsInvalid() {
+        //given
+        PersonDto personDto = getPersonDtoFirst();
+
         //when
         when(documentService.isExistById(any())).thenReturn(true);
         when(departmentService.isExistById(any())).thenReturn(false);
@@ -255,6 +234,9 @@ class PersonServiceTest {
 
     @Test
     void shouldThrowExceptionIfLanguageInPersonIsInvalid() {
+        //given
+        PersonDto personDto = getPersonDtoFirst();
+
         //when
         when(documentService.isExistById(any())).thenReturn(true);
         when(departmentService.isExistById(any())).thenReturn(true);
@@ -266,5 +248,83 @@ class PersonServiceTest {
         verify(documentService, times(1)).isExistById(any());
         verify(languageService, times(1)).isExistById(any());
         verify(departmentService, times(1)).isExistById(any());
+    }
+
+    private Person getPersonFirst() {
+        Department department = new Department(1L, "Department");
+        Document document = new Document("wer-123-fsd", new Date(12335L));
+
+        Language language = new Language(1L, "RU");
+        Language language1 = new Language(2L,"EU");
+
+        Set<Language> languageSet = new HashSet<>();
+        languageSet.add(language);
+        languageSet.add(language1);
+        return new Person(1L, "Pavel", "Morozov", new Date(1233L), department, languageSet, document);
+    }
+
+    private Person getPersonSecond() {
+        Department department = new Department(1L, "Main Department");
+        Document document = new Document("sdf-234-hhh", new Date(12335L));
+
+        Language language = new Language(1L, "IT");
+        Language language1 = new Language(2L,"GR");
+
+        Set<Language> languageSet = new HashSet<>();
+        languageSet.add(language);
+        languageSet.add(language1);
+        return new Person(2L, "Oleg", "Ivanov", new Date(2234L), department, languageSet, document);
+    }
+
+    private PersonDto getPersonDtoFirst() {
+        Department department = new Department(1L, "Department");
+        Document document = new Document("wer-123-fsd", new Date(12335L));
+
+        Set<Long> languageSet = new HashSet<>();
+        languageSet.add(1L);
+        languageSet.add(2L);
+        return new PersonDto(1L, "Pavel", "Morozov", new Date(1233L), department.getId(), languageSet, document.getId());
+    }
+
+    private PersonDto getPersonDtoSecond() {
+        Department department = new Department(1L, "Main Department");
+        Document document = new Document("sdf-234-hhh", new Date(12335L));
+
+        Set<Long> languageSet = new HashSet<>();
+        languageSet.add(1L);
+        languageSet.add(2L);
+        return new PersonDto(2L, "Oleg", "Ivanov", new Date(2234L), department.getId(), languageSet, document.getId());
+    }
+
+    private Department getDepartment() {
+        return new Department(1L, "Department");
+    }
+
+    private Document getDocument() {
+        return new Document("wer-123-fsd", new Date(12335L));
+    }
+
+    private Set<Language> getSetLanguages() {
+        Set<Language> languageSet = new HashSet<>();
+        languageSet.add(new Language(1L, "RU"));
+        languageSet.add(new Language(2L,"EU"));
+
+        return languageSet;
+    }
+
+    private DepartmentDto getDepartmentDto() {
+        return new DepartmentDto(1L, "Department");
+    }
+
+    private DocumentDto getDocumentDto() {
+        return new DocumentDto("wer-123-fsd", new Date(12335L));
+    }
+
+    private Set<Long> getSetLanguagesDto() {
+        Set<Long> languageSet = new HashSet<>();
+        languageSet.add(1L);
+        languageSet.add(2L);
+
+        return languageSet;
     }
 }

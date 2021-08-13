@@ -43,11 +43,11 @@ class DepartmentServiceTest {
         departmentList.add(department);
         departmentList.add(department1);
 
-        List<DepartmentDto> dtotList = new ArrayList<>();
+        List<DepartmentDto> expectList = new ArrayList<>();
         DepartmentDto dto = new DepartmentDto(ID1, NAME1);
         DepartmentDto dto1 = new DepartmentDto(ID2, NAME2);
-        dtotList.add(dto);
-        dtotList.add(dto1);
+        expectList.add(dto);
+        expectList.add(dto1);
 
         //when
         when(departmentRepository.findAll()).thenReturn(departmentList);
@@ -56,7 +56,7 @@ class DepartmentServiceTest {
         List<DepartmentDto> result = departmentService.getAll();
 
         //than
-        assertThat(dtotList).isEqualTo(result);
+        assertThat(expectList).isEqualTo(result);
         verify(departmentMapper, times(1)).mapToDepartmentDto(department);
         verify(departmentMapper, times(0)).mapToDepartmentEntity(any());
         verify(departmentMapper, times(1)).mapToDepartmentDto(department1);
