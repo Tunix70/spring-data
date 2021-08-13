@@ -15,19 +15,30 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class LanguageDtoValidatorTest {
-    private final LanguageDto dto = new LanguageDto();
+    private static final LanguageDto dto = new LanguageDto();
 
     @Mock
     private Errors errors;
 
-    @InjectMocks
-    private LanguageDtoValidator languageDtoValidator;
+    private final LanguageDtoValidator languageDtoValidator = new LanguageDtoValidator();
 
     @Test
     public void shouldThrowExceptionWhenNameLongConsistOf35Symbols() {
         //given
         dto.setId(1L);
         dto.setName("Russiaaaaaaaaaaaaaaaaaaaaaaaaaaaaan");
+
+        //when
+        languageDtoValidator.validate(dto, errors);
+
+        //than
+        verify(errors, times(1)).reject("length.beyond.borders", "Language name length must be between 2 and 30 characters");
+    }
+    @Test
+    public void shouldThrowExceptionWhenNameLongConsistOf1Symbols() {
+        //given
+        dto.setId(1L);
+        dto.setName("R");
 
         //when
         languageDtoValidator.validate(dto, errors);
@@ -60,6 +71,32 @@ class LanguageDtoValidatorTest {
 
         //than
         verify(errors, times(1)).reject("small.letters", "Language name must contain only small letters after first letter");
+    }
+
+    @Test
+    public void shouldThrowExceptionIfNameIsNull() {
+        //given
+        dto.setId(1L);
+        dto.setName(null);
+
+        //when
+        languageDtoValidator.validate(dto, errors);
+
+        //than
+        verify(errors, times(0)).reject("length.beyond.borders", "Language name length must be between 2 and 30 characters");
+    }
+
+    @Test
+    public void shouldThrowExceptionIfNameIsBlank() {
+        //given
+        dto.setId(1L);
+        dto.setName("");
+
+        //when
+        languageDtoValidator.validate(dto, errors);
+
+        //than
+        verify(errors, times(1)).reject("length.beyond.borders", "Language name length must be between 2 and 30 characters");
     }
 
     @Test

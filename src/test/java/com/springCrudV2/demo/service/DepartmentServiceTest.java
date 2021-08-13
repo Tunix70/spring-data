@@ -20,10 +20,10 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class DepartmentServiceTest {
-    private final Long ID1 = 1L;
-    private final Long ID2 = 2L;
-    private final String NAME1 = "Department";
-    private final String NAME2 = "New Department";
+    private static final Long ID1 = 1L;
+    private static final Long ID2 = 2L;
+    private static final String NAME1 = "Department";
+    private static final String NAME2 = "New Department";
 
     @Mock
     private DepartmentRepository departmentRepository;

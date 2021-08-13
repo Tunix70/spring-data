@@ -23,14 +23,14 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class DocumentServiceTest {
-    private final String ID1 = "wer-2124-gg";
-    private final String ID2 = "sdf-0022-as";
-    private final Date DATE1 = new Date(12335L);
-    private final Date DATE2 = new Date(54635L);
-    private final Document document = new Document(ID1, DATE1);;
-    private final Document document1 = new Document(ID2, DATE2);;
-    private final DocumentDto dto = new DocumentDto(ID1, DATE1);;
-    private final DocumentDto dto1 = new DocumentDto(ID2, DATE2);;
+    private static final String ID1 = "wer-2124-gg";
+    private static final String ID2 = "sdf-0022-as";
+    private static final Date DATE1 = new Date(12335L);
+    private static final Date DATE2 = new Date(54635L);
+    private static final Document document = new Document(ID1, DATE1);;
+    private static final Document document1 = new Document(ID2, DATE2);;
+    private static final DocumentDto dto = new DocumentDto(ID1, DATE1);;
+    private static final DocumentDto dto1 = new DocumentDto(ID2, DATE2);;
 
     @Mock
     private DocumentRepository documentRepository;

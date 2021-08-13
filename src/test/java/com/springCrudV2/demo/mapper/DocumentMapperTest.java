@@ -11,8 +11,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class DocumentMapperTest {
     private DocumentMapper documentMapper = new DocumentMapper();
-    private final Date DATE = new Date(45654625L);
-    private final String NAME = "yer-345-tuu";
+    private static final Date DATE = new Date(45654625L);
+    private static final String NAME = "yer-345-tuu";
 
     @Test
     void shouldMapToDtoFromEntity() {

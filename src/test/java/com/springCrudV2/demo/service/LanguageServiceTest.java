@@ -27,13 +27,13 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class LanguageServiceTest {
-    private final Long ID = 1L;
-    private final Language language = new Language(1L, "RU");
-    private final Language language1 = new Language(2L,"EU");
-    private final Language language2 = new Language(3L, "IT");
-    private final LanguageDto dto = new LanguageDto(1L, "RU");
-    private final LanguageDto dto1 = new LanguageDto(2L,"EU");
-    private final LanguageDto dto2 = new LanguageDto(3L, "IT");
+    private static final Long ID = 1L;
+    private static final Language language = new Language(1L, "RU");
+    private static final Language language1 = new Language(2L,"EU");
+    private static final Language language2 = new Language(3L, "IT");
+    private static final LanguageDto dto = new LanguageDto(1L, "RU");
+    private static final LanguageDto dto1 = new LanguageDto(2L,"EU");
+    private static final LanguageDto dto2 = new LanguageDto(3L, "IT");
 
     @Mock
     private LanguageRepository languageRepository;

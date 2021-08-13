@@ -9,8 +9,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class LanguageMapperTest {
     private LanguageMapper languageMapper = new LanguageMapper();
-    private final Long ID = 43L;
-    private final String NAME = "RU";
+    private static final Long ID = 43L;
+    private static final String NAME = "RU";
 
     @Test
     void shouldMapToDtoFromEntity() {

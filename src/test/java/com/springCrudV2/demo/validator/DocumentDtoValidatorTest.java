@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
 
 import java.sql.Date;
 
@@ -19,12 +20,11 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class DocumentDtoValidatorTest {
     private final DocumentDto documentDto = new DocumentDto();
-    
+
     @Mock
     private Errors errors;
-    
-    @InjectMocks
-    private DocumentDtoValidator documentDtoValidator;
+
+    private final DocumentDtoValidator documentDtoValidator = new DocumentDtoValidator();
     
     @Test
     public void shouldThrowExceptionWhenYearIsPast() {
