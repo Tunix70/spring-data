@@ -32,7 +32,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class PersonServiceTest {
-    private final Long ID = 1L;
+    private static final Long ID = 1L;
     @Mock
     private PersonRepository personRepository;
     @Mock

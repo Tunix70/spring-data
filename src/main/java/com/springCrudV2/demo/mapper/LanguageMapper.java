@@ -1,11 +1,14 @@
-package com.springCrudV2.demo.mapperDto;
+package com.springCrudV2.demo.mapper;
 
 import com.springCrudV2.demo.dto.LanguageDto;
 import com.springCrudV2.demo.entity.Language;
 import org.springframework.stereotype.Component;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Component
-public class LanguageMapperDto {
+public class LanguageMapper {
     public LanguageDto mapToLanguageDto(Language language) {
         LanguageDto dto = new LanguageDto();
 

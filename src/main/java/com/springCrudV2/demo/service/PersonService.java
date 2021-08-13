@@ -6,13 +6,15 @@ import com.springCrudV2.demo.dto.DocumentDto;
 import com.springCrudV2.demo.dto.PersonDto;
 import com.springCrudV2.demo.entity.Language;
 import com.springCrudV2.demo.entity.Person;
-import com.springCrudV2.demo.exception.NotFoundLanguageException;
-import com.springCrudV2.demo.mapperDto.PersonMapperDto;
+import com.springCrudV2.demo.exception.DepartmentNotFoundException;
+import com.springCrudV2.demo.exception.DocumentNotFoundException;
+import com.springCrudV2.demo.exception.LanguageNotFoundException;
+import com.springCrudV2.demo.exception.PersonNotFoundException;
+import com.springCrudV2.demo.mapper.PersonMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -22,34 +24,35 @@ public class PersonService {
     private final DocumentService documentService;
     private final DepartmentService departmentService;
     private final LanguageService languageService;
-    private final PersonMapperDto personMapperDto;
+    private final PersonMapper personMapper;
 
     @Autowired
     public PersonService(PersonRepository personRepository, DocumentService documentService,
-                         DepartmentService departmentService, LanguageService languageService, PersonMapperDto personMapperDto) {
+                         DepartmentService departmentService, LanguageService languageService, PersonMapper personMapper) {
         this.personRepository = personRepository;
         this.documentService = documentService;
         this.departmentService = departmentService;
         this.languageService = languageService;
-        this.personMapperDto = personMapperDto;
+        this.personMapper = personMapper;
     }
 
     public List<PersonDto> getAll() {
         List<Person> departmentList = personRepository.findAll();
         return departmentList.stream()
-                .map(personMapperDto::mapToPersonDto)
+                .map(personMapper::mapToPersonDto)
                 .collect(Collectors.toList());
     }
 
     public PersonDto getPersonById(Long id) {
-        Person person = personRepository.findById(id).orElse(null);
-        return personMapperDto.mapToPersonDto(person);
+        Person person = personRepository.findById(id).orElseThrow(() -> new PersonNotFoundException(id));
+        return personMapper.mapToPersonDto(person);
     }
 
     public PersonDto save(PersonDto dto) {
-            Person person = fillFieldsPerson(dto);
-            Person savePerson = personRepository.save(person);
-            dto.setId(savePerson.getId());
+        isValidDto(dto);
+        Person person = fillFieldsPerson(dto);
+        Person savePerson = personRepository.save(person);
+        dto.setId(savePerson.getId());
         return dto;
     }
 
@@ -58,10 +61,10 @@ public class PersonService {
     }
 
     public Person fillFieldsPerson(PersonDto dto) {
-        Person person = personMapperDto.mapToPersonEntity(dto);
+        Person person = personMapper.mapToPersonEntity(dto);
 
         DocumentDto documentDto = documentService.getDocumentById(dto.getDocument());
-        person.setDocument(documentService.getEntyty(documentDto));
+        person.setDocument(documentService.getEntity(documentDto));
 
         DepartmentDto departmentDto = departmentService.getDepartmentById(dto.getDepartment());
         person.setDepartment(departmentService.getEntity(departmentDto));
@@ -73,5 +76,17 @@ public class PersonService {
 
         person.setLanguageList(dtoSet);
         return person;
+    }
+
+    public boolean isValidDto(PersonDto dto) {
+        if (!documentService.isExistById(dto.getDocument()))
+            throw new DocumentNotFoundException(dto.getDocument());
+        if (!departmentService.isExistById(dto.getDepartment()))
+            throw new DepartmentNotFoundException(dto.getDepartment());
+        for (Long language : dto.getLanguages()) {
+            if (!languageService.isExistById(language))
+                throw new LanguageNotFoundException(language);
+        }
+        return true;
     }
 }

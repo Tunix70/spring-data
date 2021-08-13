@@ -9,6 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @RestController
@@ -24,13 +26,13 @@ public class DocumentController {
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<DocumentDto>> getAll() {
         List<DocumentDto> dtoList = documentService.getAll();
-        return dtoList != null || !dtoList.isEmpty()
+        return dtoList != null
                 ? new ResponseEntity<>(dtoList, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping(value = "{id}")
-    public ResponseEntity<DocumentDto> getById(@PathVariable(name = "id") String id) {
+    public ResponseEntity<DocumentDto> getById(@PathVariable(name = "id") @NotBlank String id) {
         DocumentDto dto = documentService.getDocumentById(id);
         return dto != null
                 ? new ResponseEntity<>(dto, HttpStatus.OK)
@@ -38,7 +40,7 @@ public class DocumentController {
     }
 
     @PostMapping(value = "")
-    public ResponseEntity<DocumentDto> save(@RequestBody DocumentDto dto) {
+    public ResponseEntity<DocumentDto> save(@Valid @RequestBody DocumentDto dto) {
         documentService.save(dto);
         return dto != null
                 ? new ResponseEntity<>(dto, HttpStatus.CREATED)
@@ -46,7 +48,7 @@ public class DocumentController {
     }
 
     @PutMapping(value = "")
-    public ResponseEntity<DocumentDto> update(@RequestBody DocumentDto dto) {
+    public ResponseEntity<DocumentDto> update(@Valid @RequestBody DocumentDto dto) {
         DocumentDto updateDocument = documentService.save(dto);
         return updateDocument != null
                 ? new ResponseEntity<>(HttpStatus.OK)
@@ -54,7 +56,7 @@ public class DocumentController {
     }
 
     @DeleteMapping(value = "{id}")
-    public ResponseEntity<DocumentDto> deleteById(@PathVariable(name = "id") String id) {
+    public ResponseEntity<DocumentDto> deleteById(@PathVariable(name = "id") @NotBlank String id) {
         documentService.deleteByNumber(id);
         return id != null
                 ? new ResponseEntity<>(HttpStatus.OK)

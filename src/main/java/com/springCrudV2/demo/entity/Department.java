@@ -3,6 +3,7 @@ package com.springCrudV2.demo.entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "department")
@@ -17,6 +18,11 @@ public class Department {
     private List<Person> personList;
 
     public Department() {
+    }
+
+    public Department(Long id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     public Department(String name) {
@@ -39,5 +45,16 @@ public class Department {
         this.name = name;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Department that = (Department) o;
+        return id.equals(that.id) && name.equals(that.name);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
+    }
 }

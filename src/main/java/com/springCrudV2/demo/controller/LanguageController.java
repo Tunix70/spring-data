@@ -9,8 +9,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
+
 
 @RestController
 @RequestMapping("/languages")
@@ -25,13 +27,13 @@ public class LanguageController {
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Set<LanguageDto>> getAll() {
         Set<LanguageDto> languageList = languageService.getAll();
-        return languageList != null || !languageList.isEmpty()
+        return languageList != null
                 ? new ResponseEntity<>(languageList, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<LanguageDto> getById(@PathVariable("id") Long id) {
+    public ResponseEntity<LanguageDto> getById(@PathVariable("id") @Min(1) @NotNull Long id) {
         LanguageDto language = languageService.getLanguageById(id);
         return language != null
                 ? new ResponseEntity<>(language, HttpStatus.OK)
@@ -55,7 +57,7 @@ public class LanguageController {
     }
 
     @DeleteMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Language> deleteById(@PathVariable("id") Long id) {
+    public ResponseEntity<Language> deleteById(@PathVariable("id") @Min(1) @NotNull Long id) {
         languageService.deleteById(id);
         return id != null
                 ? new ResponseEntity<>(HttpStatus.OK)

@@ -1,11 +1,11 @@
-package com.springCrudV2.demo.mapperDto;
+package com.springCrudV2.demo.mapper;
 
 import com.springCrudV2.demo.dto.DocumentDto;
 import com.springCrudV2.demo.entity.Document;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DocumentMapperDto {
+public class DocumentMapper {
     public DocumentDto mapToDocumentDto(Document document) {
         DocumentDto dto = new DocumentDto();
 
