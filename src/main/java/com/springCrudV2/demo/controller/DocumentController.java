@@ -25,6 +25,7 @@ public class DocumentController {
     }
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('developers:read')")
     public ResponseEntity<List<DocumentDto>> getAll() {
         List<DocumentDto> dtoList = documentService.getAll();
         return dtoList != null
@@ -33,6 +34,7 @@ public class DocumentController {
     }
 
     @GetMapping(value = "{id}")
+    @PreAuthorize("hasAuthority('developers:read')")
     public ResponseEntity<DocumentDto> getById(@PathVariable(name = "id") @NotBlank String id) {
         DocumentDto dto = documentService.getDocumentById(id);
         return dto != null
@@ -41,6 +43,7 @@ public class DocumentController {
     }
 
     @PostMapping(value = "")
+    @PreAuthorize("hasAuthority('developers:write')")
     public ResponseEntity<DocumentDto> save(@Valid @RequestBody DocumentDto dto) {
         documentService.save(dto);
         return dto != null
@@ -49,6 +52,7 @@ public class DocumentController {
     }
 
     @PutMapping(value = "")
+    @PreAuthorize("hasAuthority('developers:write')")
     public ResponseEntity<DocumentDto> update(@Valid @RequestBody DocumentDto dto) {
         DocumentDto updateDocument = documentService.save(dto);
         return updateDocument != null
@@ -57,6 +61,7 @@ public class DocumentController {
     }
 
     @DeleteMapping(value = "{id}")
+    @PreAuthorize("hasAuthority('developers:write')")
     public ResponseEntity<DocumentDto> deleteById(@PathVariable(name = "id") @NotBlank String id) {
         documentService.deleteByNumber(id);
         return id != null
