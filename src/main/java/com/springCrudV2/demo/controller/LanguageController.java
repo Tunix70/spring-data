@@ -26,6 +26,7 @@ public class LanguageController {
     }
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('developers:read')")
     public ResponseEntity<Set<LanguageDto>> getAll() {
         Set<LanguageDto> languageList = languageService.getAll();
         return languageList != null
@@ -34,22 +35,26 @@ public class LanguageController {
     }
 
     @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('developers:read')")
     public ResponseEntity<LanguageDto> getById(@PathVariable("id") @Min(1) @NotNull Long id) {
         LanguageDto language = languageService.getLanguageById(id);
         return new ResponseEntity<>(language, HttpStatus.OK);
     }
 
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('developers:write')")
     public ResponseEntity<LanguageDto> save(@RequestBody LanguageDto dto) {
         return new ResponseEntity<>(languageService.save(dto), HttpStatus.OK);
     }
 
     @PutMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('developers:write')")
     public ResponseEntity<LanguageDto> update(@RequestBody LanguageDto dto) {
         return new ResponseEntity<>(languageService.save(dto), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('developers:write')")
     public ResponseEntity<Language> deleteById(@PathVariable("id") @Min(1) @NotNull Long id) {
         languageService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);

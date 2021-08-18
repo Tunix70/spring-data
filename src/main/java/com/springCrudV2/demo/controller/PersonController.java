@@ -26,6 +26,7 @@ public class PersonController {
     }
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('developers:read')")
     public ResponseEntity<List<PersonDto>> getAll() {
         List<PersonDto> personList = personService.getAll();
         return personList != null
@@ -34,6 +35,7 @@ public class PersonController {
     }
 
     @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('developers:read')")
     public ResponseEntity<PersonDto> getById(@PathVariable("id") @NotNull Long id) {
         PersonDto person = personService.getPersonById(id);
         return person != null
@@ -42,6 +44,7 @@ public class PersonController {
     }
 
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('developers:write')")
     public ResponseEntity<PersonDto> save(@Valid @RequestBody PersonDto personDto) {
         PersonDto savePerson = personService.save(personDto);
         return personDto != null
@@ -50,6 +53,7 @@ public class PersonController {
     }
 
     @PutMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('developers:write')")
     public ResponseEntity<PersonDto> update(@Valid @RequestBody PersonDto personDto) {
         PersonDto updatePerson = personService.save(personDto);
         return updatePerson != null
@@ -58,6 +62,7 @@ public class PersonController {
     }
 
     @DeleteMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('developers:write')")
     public ResponseEntity<Person> deleteById(@PathVariable("id") Long id) {
         personService.deleteById(id);
         return id != null

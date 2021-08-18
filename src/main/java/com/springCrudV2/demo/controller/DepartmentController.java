@@ -27,6 +27,7 @@ public class DepartmentController {
     }
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('developers:read')")
     public ResponseEntity<List<DepartmentDto>> getAll() {
         List<DepartmentDto> dtoList = departmentService.getAll();
         return dtoList != null
@@ -35,6 +36,7 @@ public class DepartmentController {
     }
 
     @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('developers:read')")
     public ResponseEntity<DepartmentDto> getById(@PathVariable("id") @Min(1) @NotNull Long id) {
         DepartmentDto dto = departmentService.getDepartmentById(id);
         return dto != null
@@ -43,12 +45,14 @@ public class DepartmentController {
     }
 
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('developers:write')")
     public ResponseEntity<DepartmentDto> save(@Valid @NotNull @RequestBody DepartmentDto departmentDto) {
         DepartmentDto saveDepartment = departmentService.save(departmentDto);
         return new ResponseEntity<>(saveDepartment, HttpStatus.CREATED);
     }
 
     @PutMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('developers:write')")
     public ResponseEntity<DepartmentDto> update(@Valid @NotNull @RequestBody DepartmentDto departmentDto) {
         DepartmentDto updateDepartment = departmentService.save(departmentDto);
         return updateDepartment != null
@@ -57,6 +61,7 @@ public class DepartmentController {
     }
 
     @DeleteMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('developers:write')")
     public ResponseEntity<DepartmentDto> deleteById(@PathVariable("id") @Min(1) @NotNull Long id) {
         departmentService.deleteById(id);
         return id != null
