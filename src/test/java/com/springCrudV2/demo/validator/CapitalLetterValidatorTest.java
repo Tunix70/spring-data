@@ -8,8 +8,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @ExtendWith(MockitoExtension.class)
 class CapitalLetterValidatorTest {
-
-
     private CapitalLetterValidator capitalLetterValidator = new CapitalLetterValidator();
 
     @Test

@@ -10,7 +10,7 @@ import java.sql.Date;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class DocumentMapperTest {
-    private DocumentMapper documentMapper = new DocumentMapper();
+    private final DocumentMapper documentMapper = new DocumentMapper();
     private static final Date DATE = new Date(45654625L);
     private static final String NAME = "yer-345-tuu";
 

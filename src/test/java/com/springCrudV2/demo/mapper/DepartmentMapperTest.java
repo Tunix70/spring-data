@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class DepartmentMapperTest {
-    private DepartmentMapper departmentMapper = new DepartmentMapper();
+    private final DepartmentMapper departmentMapper = new DepartmentMapper();
     private static Long ID = 43L;
     private static String NAME = "Department";
 
