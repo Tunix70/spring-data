@@ -1,4 +1,4 @@
-package com.springCrudV2.demo.entity;
+package com.springCrudV2.demo.model;
 
 public enum Permission {
     DEVELOPERS_READ("developers:read"),
