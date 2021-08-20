@@ -23,10 +23,11 @@ public class WeatherService {
     }
 
     public Weather getWeatherMain(String username) {
-        Weather weather = null;
         OkHttpClient client = new OkHttpClient();
-        String city = userRepository.getUserByName(username).orElseThrow(() -> new UsernameNotFoundException(username)).getCity();
+        Weather weather = null;
+        String city = getCity(username);
         String apiKey = "f0d7c77842669fcea2015fdeb04698ea";
+
         HttpUrl uri = new HttpUrl.Builder()
                 .scheme("https")
                 .host("api.openweathermap.org")
@@ -46,4 +47,9 @@ public class WeatherService {
         }
         return weather;
     }
-}
+
+    private String getCity(String userName) {
+        return userRepository.getUserByName(userName).orElseThrow(
+                () -> new UsernameNotFoundException(userName)).getCity();
+    }
+ }
