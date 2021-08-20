@@ -41,6 +41,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         clients.inMemory()
                 .withClient("client")
                 .authorizedGrantTypes("password")
+                .accessTokenValiditySeconds(600)
                 .scopes("read", "write");
     }
 
@@ -52,7 +53,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Bean
     public JwtAccessTokenConverter accessTokenConverter() {
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        converter.setSigningKey("123");
+        converter.setSigningKey("qwd1");
         return converter;
     }
 
