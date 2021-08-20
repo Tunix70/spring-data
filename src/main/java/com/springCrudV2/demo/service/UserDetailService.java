@@ -1,7 +1,8 @@
-package com.springCrudV2.demo.security;
+package com.springCrudV2.demo.service;
 
 import com.springCrudV2.demo.dao.UserRepository;
 import com.springCrudV2.demo.entity.User;
+import com.springCrudV2.demo.security.UserSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -9,12 +10,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service("userDetailServiceImpl")
-public class UserDetailServiceImpl implements UserDetailsService {
-
+public class UserDetailService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Autowired
-    public UserDetailServiceImpl(UserRepository userRepository) {
+    public UserDetailService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

@@ -36,25 +36,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated();
     }
 
-//    @Bean
-//    protected UserDetailsService users() {
-//        return new InMemoryUserDetailsManager(
-//        User.builder()
-//                .username("admin")
-//                .password(passwordEncoder().encode("admin"))
-//                .authorities(Role.ADMIN.getAuthorities())
-//                .build(),
-//        User.builder()
-//                .username("user")
-//                .password(passwordEncoder().encode("user"))
-//                .authorities(Role.USER.getAuthorities())
-//                .build()
-//        );
-//    }
-
-
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth){
         auth.authenticationProvider(daoAuthenticationProvider());
     }
 
