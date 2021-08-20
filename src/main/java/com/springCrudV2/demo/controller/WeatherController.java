@@ -22,7 +22,7 @@ public class WeatherController {
         this.weatherService = weatherService;
     }
 
-    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping
     @PreAuthorize("hasAuthority('developers:read')")
     public ResponseEntity<Weather> getWeather(@CurrentSecurityContext(expression = "authentication?.name") String userName) {
         Weather weatherMain = weatherService.getWeatherMain(userName);
