@@ -3,7 +3,6 @@ package com.springCrudV2.demo.entity;
 import com.springCrudV2.demo.model.Role;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Entity
@@ -13,17 +12,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @NotNull
     @Column(name = "name", nullable = false)
     private String name;
-    @NotNull
     @Column(name = "password", nullable = false)
     private String password;
     @Column(name = "role")
-    @NotNull
     @Enumerated(value = EnumType.STRING)
     private Role role;
-    @NotNull
     @Column(name = "city", nullable = false)
     private String city;
 

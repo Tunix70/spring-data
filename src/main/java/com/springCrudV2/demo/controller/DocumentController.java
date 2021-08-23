@@ -24,7 +24,7 @@ public class DocumentController {
         this.documentService = documentService;
     }
 
-    @GetMapping
+    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('developers:read')")
     public ResponseEntity<List<DocumentDto>> getAll() {
         List<DocumentDto> dtoList = documentService.getAll();
@@ -42,7 +42,7 @@ public class DocumentController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping
+    @PostMapping(value = "")
     @PreAuthorize("hasAuthority('developers:write')")
     public ResponseEntity<DocumentDto> save(@Valid @RequestBody DocumentDto dto) {
         documentService.save(dto);
@@ -51,7 +51,7 @@ public class DocumentController {
                 : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PutMapping
+    @PutMapping(value = "")
     @PreAuthorize("hasAuthority('developers:write')")
     public ResponseEntity<DocumentDto> update(@Valid @RequestBody DocumentDto dto) {
         DocumentDto updateDocument = documentService.save(dto);
