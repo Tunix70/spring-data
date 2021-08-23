@@ -58,7 +58,7 @@ class DocumentServiceTest {
         when(documentMapper.mapToDocumentDto(document1)).thenReturn(dto1);
         List<DocumentDto> resultList = documentService.getAll();
 
-        //than
+        //then
         assertThat(extectedList).isEqualTo(resultList);
         verify(documentMapper, times(1)).mapToDocumentDto(document);
         verify(documentMapper, times(1)).mapToDocumentDto(document1);
