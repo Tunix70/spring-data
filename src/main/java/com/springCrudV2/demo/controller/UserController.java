@@ -24,7 +24,7 @@ public class UserController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('developers:read')")
+    @PreAuthorize("hasAuthority('developers:general')")
     public ResponseEntity<List<UserDto>> getAll() {
         List<UserDto> userList = userDetailService.getAll();
         return userList != null
@@ -33,7 +33,7 @@ public class UserController {
     }
 
     @GetMapping(value = "{id}")
-    @PreAuthorize("hasAuthority('developers:read')")
+    @PreAuthorize("hasAuthority('developers:general')")
     public ResponseEntity<UserDto> getById(@PathVariable("id") @NotNull Long id) {
         UserDto user = userDetailService.getUserById(id);
         return user != null
@@ -42,7 +42,7 @@ public class UserController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('developers:read')")
+    @PreAuthorize("hasAuthority('developers:general')")
     public ResponseEntity<UserDto> save(@Valid @NotNull @RequestBody UserDto userDto) {
         UserDto user = userDetailService.save(userDto);
         return user != null
@@ -51,7 +51,7 @@ public class UserController {
     }
 
     @PutMapping
-    @PreAuthorize("hasAuthority('developers:read')")
+    @PreAuthorize("hasAuthority('developers:general')")
     public ResponseEntity<UserDto> update(@Valid  @NotNull @RequestBody UserDto userDto) {
         UserDto user = userDetailService.save(userDto);
         return user != null
@@ -60,7 +60,7 @@ public class UserController {
     }
 
     @DeleteMapping(value = "{id}")
-    @PreAuthorize("hasRole('SUPERADMIN')")
+    @PreAuthorize("hasAuthority('developers:general')")
     public ResponseEntity<User> deleteById(@PathVariable("id") Long id) {
         userDetailService.deletById(id);
         return id != null

@@ -23,8 +23,6 @@ public class WeatherService {
     }
 
     public Weather getWeatherMain(String username) {
-        OkHttpClient client = new OkHttpClient();
-        Weather weather = null;
         String city = getCity(username);
         String apiKey = "f0d7c77842669fcea2015fdeb04698ea";
 
@@ -38,18 +36,34 @@ public class WeatherService {
                 .addQueryParameter("appid", apiKey)
                 .build();
         Request request = new Request.Builder().url(uri).get().build();
+        Response response = getResponce(request);
+        return getWeatherFromResponce(response);
+    }
+
+    public String getCity(String userName) {
+        return userRepository.getUserByName(userName).orElseThrow(
+                () -> new UsernameNotFoundException(userName)).getCity();
+    }
+
+    public Response getResponce (Request request) {
+        Response response = null;
+        OkHttpClient client = new OkHttpClient();
         try {
-            Response response = client.newCall(request).execute();
-            ObjectMapper mapper = new ObjectMapper();
+            response = client.newCall(request).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return response;
+    }
+
+    public Weather getWeatherFromResponce (Response response) {
+        Weather weather = null;
+        ObjectMapper mapper = new ObjectMapper();
+        try {
             weather = mapper.readValue(response.body().string(), Weather.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return weather;
-    }
-
-    private String getCity(String userName) {
-        return userRepository.getUserByName(userName).orElseThrow(
-                () -> new UsernameNotFoundException(userName)).getCity();
     }
  }
