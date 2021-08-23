@@ -1,4 +1,4 @@
-package com.springCrudV2.demo.security;
+package com.springCrudV2.demo.model;
 
 import com.springCrudV2.demo.entity.User;
 import org.springframework.security.core.GrantedAuthority;

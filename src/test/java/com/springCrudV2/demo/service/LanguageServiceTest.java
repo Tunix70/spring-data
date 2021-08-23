@@ -64,7 +64,7 @@ class LanguageServiceTest {
         when(languageMapper.mapToLanguageDto(language2)).thenReturn(dto2);
         Set<LanguageDto> resultList = languageService.getAll();
 
-        //than
+        //then
         assertThat(resultList).isEqualTo(expectedList);
         verify(languageMapper, times(0)).mapToLanguageEntity(any());
         verify(languageMapper, times(3)).mapToLanguageDto(any());

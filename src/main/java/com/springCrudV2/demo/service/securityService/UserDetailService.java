@@ -1,8 +1,8 @@
-package com.springCrudV2.demo.service;
+package com.springCrudV2.demo.service.securityService;
 
 import com.springCrudV2.demo.dao.UserRepository;
 import com.springCrudV2.demo.entity.User;
-import com.springCrudV2.demo.security.UserSecurity;
+import com.springCrudV2.demo.model.UserSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
