@@ -22,11 +22,25 @@ public class WeatherService {
         this.userRepository = userRepository;
     }
 
-    public Weather getWeatherMain(String username) {
-        String city = getCity(username);
+    public Weather getWeather(String username) {
+        Weather weather = null;
+        HttpUrl uri = getUri(username);
+        Request request = new Request.Builder().url(uri).get().build();
+        Response response = getWeatherResponse(request);
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            weather = objectMapper.readValue(response.body().string(), Weather.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return weather;
+    }
+
+    public HttpUrl getUri(String userName) {
+        String city = getCity(userName);
         String apiKey = "f0d7c77842669fcea2015fdeb04698ea";
 
-        HttpUrl uri = new HttpUrl.Builder()
+        return new HttpUrl.Builder()
                 .scheme("https")
                 .host("api.openweathermap.org")
                 .addPathSegment("data")
@@ -35,9 +49,6 @@ public class WeatherService {
                 .addQueryParameter("q", city)
                 .addQueryParameter("appid", apiKey)
                 .build();
-        Request request = new Request.Builder().url(uri).get().build();
-        Response response = getResponce(request);
-        return getWeatherFromResponce(response);
     }
 
     public String getCity(String userName) {
@@ -45,7 +56,7 @@ public class WeatherService {
                 () -> new UsernameNotFoundException(userName)).getCity();
     }
 
-    public Response getResponce (Request request) {
+    private Response getWeatherResponse (Request request) {
         Response response = null;
         OkHttpClient client = new OkHttpClient();
         try {
@@ -54,16 +65,5 @@ public class WeatherService {
             e.printStackTrace();
         }
         return response;
-    }
-
-    public Weather getWeatherFromResponce (Response response) {
-        Weather weather = null;
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            weather = mapper.readValue(response.body().string(), Weather.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return weather;
     }
  }

@@ -22,10 +22,10 @@ public class WeatherController {
         this.weatherService = weatherService;
     }
 
-    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping
     @PreAuthorize("hasAuthority('developers:read')")
     public ResponseEntity<Weather> getWeather(@CurrentSecurityContext(expression = "authentication?.name") String userName) {
-        Weather weatherMain = weatherService.getWeatherMain(userName);
+        Weather weatherMain = weatherService.getWeather(userName);
         return weatherMain != null
                 ? new ResponseEntity<>(weatherMain, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);

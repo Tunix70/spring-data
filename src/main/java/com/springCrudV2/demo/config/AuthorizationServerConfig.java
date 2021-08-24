@@ -42,7 +42,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .withClient("client")
                 .authorizedGrantTypes("password")
                 .accessTokenValiditySeconds(600)
-                .scopes("read", "write");
+                .scopes("read", "write", "general");
     }
 
     @Bean
